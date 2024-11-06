@@ -1,0 +1,155 @@
+{
+    "ranking": [
+      {
+        "rank": 1,
+        "player": "Định",
+        "wins": 7,
+        "draws": 0,
+        "losses": 2,
+        "goals_for": 22,
+        "goals_against": 15,
+        "goal_difference": 7,
+        "points": 21
+      },
+      {
+        "rank": 2,
+        "player": "Tùng",
+        "wins": 5,
+        "draws": 0,
+        "losses": 4,
+        "goals_for": 28,
+        "goals_against": 23,
+        "goal_difference": 5,
+        "points": 15
+      },
+      {
+        "rank": 3,
+        "player": "Tân",
+        "wins": 1,
+        "draws": 0,
+        "losses": 8,
+        "goals_for": 15,
+        "goals_against": 27,
+        "goal_difference": -12,
+        "points": 3
+      }
+    ],
+    "matches": [
+      {
+        "match_number": 1,
+        "home_player": "Tân",
+        "home_team": "Bayern Munich",
+        "home_score": 2,
+        "away_player": "Tùng",
+        "away_team": "Manchester City",
+        "away_score": 3
+      },
+      {
+        "match_number": 2,
+        "home_player": "Định",
+        "home_team": "Inter Milan",
+        "home_score": 1,
+        "away_player": "Tùng",
+        "away_team": "Bayern Munich",
+        "away_score": 2
+      },
+      {
+        "match_number": 3,
+        "home_player": "Tùng",
+        "home_team": "Barca",
+        "home_score": 2,
+        "away_player": "Định",
+        "away_team": "Real",
+        "away_score": 0
+      },
+      {
+        "match_number": 4,
+        "home_player": "Tân",
+        "home_team": "Liverpool",
+        "home_score": 2,
+        "away_player": "Tùng",
+        "away_team": "Manchester City",
+        "away_score": 0
+      },
+      {
+        "match_number": 5,
+        "home_player": "Tân",
+        "home_team": "Liverpool",
+        "home_score": 5,
+        "away_player": "Tùng",
+        "away_team": "Manchester City",
+        "away_score": 2
+      },
+      {
+        "match_number": 6,
+        "home_player": "Định",
+        "home_score": 1,
+        "away_player": "Tân",
+        "away_score": 0
+      },
+      {
+        "match_number": 7,
+        "home_player": "Định",
+        "home_score": 3,
+        "away_player": "Tân",
+        "away_score": 1
+      },
+      {
+        "match_number": 8,
+        "home_player": "Tùng",
+        "home_score": 7,
+        "away_player": "Tân",
+        "away_score": 2
+      },
+      {
+        "match_number": 9,
+        "home_player": "Định",
+        "home_score": 3,
+        "away_player": "Tùng",
+        "away_score": 2
+      },
+      {
+        "match_number": 10,
+        "home_player": "Định",
+        "home_score": 3,
+        "away_player": "Tân",
+        "away_score": 2
+      },
+      {
+        "match_number": 11,
+        "home_player": "Tân",
+        "home_score": 5,
+        "away_player": "Tùng",
+        "away_score": 0
+      },
+      {
+        "match_number": 12,
+        "home_player": "Định",
+        "home_score": 4,
+        "away_player": "Tùng",
+        "away_score": 1
+      },
+      {
+        "match_number": 13,
+        "home_player": "Tân",
+        "home_score": 2,
+        "away_player": "Định",
+        "away_score": 1
+      },
+      {
+        "match_number": 14,
+        "home_player": "Tùng",
+        "home_score": 5,
+        "away_player": "Tân",
+        "away_score": 2
+      },
+      {
+        "match_number": 15,
+        "home_player": "Định",
+        "home_score": 2,
+        "away_player": "Tùng",
+        "away_score": 0
+      }
+    ]
+  }
+  
