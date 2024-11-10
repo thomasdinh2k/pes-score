@@ -7,56 +7,80 @@ type Props = {
 };
 
 const MatchHistory = ({ matchesData }: Props) => {
+	const winnerStyle = { color: "green", fontWeight: "bolder" };
+
 	const columns: TableProps<Matches>["columns"] = [
 		{
-			title: "Rank",
-			dataIndex: "rank",
-			key: "rank",
+			title: "Match",
+			dataIndex: "match_number",
+			key: "match_number",
 			render: (_, __, index) => <span>{index + 1}</span>,
 		},
 		{
-			title: "Player",
-			dataIndex: "player",
-			key: "player",
+			title: "Home Player",
+			dataIndex: "home_player",
+			key: "home_player",
+			render: (value, record) => {
+				const isWinner = record.home_score > record.away_score;
+				return <span style={isWinner ? winnerStyle : {}}>{value}</span>;
+			},
 		},
 		{
-			title: "Wins",
-			dataIndex: "wins",
-			key: "wins",
+			title: "Home Team",
+			dataIndex: "home_team",
+			key: "home_team",
+			render: (value, record) => {
+				const isWinner = record.home_score > record.away_score;
+
+				return <span style={isWinner ? winnerStyle : {}}>{value}</span>;
+			},
 		},
 		{
-			title: "Draws",
-			dataIndex: "draws",
-			key: "draws",
-		},
-		{
-			title: "Losses",
-			dataIndex: "losses",
-			key: "losses",
-		},
-		{
-			title: "Goal for/against",
-			dataIndex: "goal_difference",
-			key: "goal_difference",
-			render: (_, record) => (
-				<span>
-					{record.goals_for}/{record.goals_against}
+			title: "",
+			dataIndex: "home_score",
+			key: "home_score",
+			render: (value, record) => (
+				<span style={value > record.away_score ? winnerStyle : {}}>
+					{value}
 				</span>
 			),
 		},
 		{
-			title: "Goal Difference",
-			dataIndex: "goal_difference",
-			key: "goal_difference",
+			title: "",
+			dataIndex: "away_score",
+			key: "away_score",
+			render: (value, record) => (
+				<span
+					style={
+						value > record.home_score
+							? { color: "green", fontWeight: "bolder" }
+							: {}
+					}
+				>
+					{value}
+				</span>
+			),
 		},
 		{
-			title: "Points",
-			dataIndex: "points",
-			key: "points",
+			title: "Away Team",
+			dataIndex: "away_team",
+			key: "away_team",
+      render: (value, record) => {
+				const isWinner = record.home_score < record.away_score;
+				return <span style={isWinner ? winnerStyle : {}}>{value}</span>;
+			},
+		},
+		{
+			title: "Away player",
+			dataIndex: "away_player",
+			key: "away_player",
+      render: (value, record) => {
+				const isWinner = record.home_score < record.away_score;
+				return <span style={isWinner ? winnerStyle : {}}>{value}</span>;
+			},
 		},
 	];
 
-	console.log(matchesData);
 
 	return (
 		<>
