@@ -1,5 +1,5 @@
 "use client";
-import type { FetchedData } from "../types/data.type";
+import type { Ranking } from "../types/data.type";
 import { Table } from "antd";
 import type { TableProps } from "antd";
 
@@ -7,10 +7,10 @@ const Ranking = ({
 	rankingData,
 	loading,
 }: {
-	rankingData: FetchedData["ranking"];
+	rankingData: Ranking[];
 	loading: boolean;
 }) => {
-	const columns: TableProps<FetchedData["ranking"]>["columns"] = [
+	const columns: TableProps<Ranking>["columns"] = [
 		{
 			title: "Rank",
 			dataIndex: "rank",
@@ -65,10 +65,11 @@ const Ranking = ({
 		<>
 			<h2>Ranking</h2>
 
-			<Table<FetchedData["ranking"]>
+			<Table<Ranking>
 				columns={columns}
 				dataSource={rankingData}
 				loading={loading}
+				pagination={false}
 			/>
 		</>
 	);
