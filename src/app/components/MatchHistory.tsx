@@ -1,6 +1,7 @@
 import React from "react";
 import type { Matches } from "../types/data.type";
 import { Table, TableProps } from "antd";
+import { createStyles } from "antd-style";
 
 type Props = {
 	matchesData: Matches[];
@@ -8,6 +9,24 @@ type Props = {
 
 const MatchHistory = ({ matchesData }: Props) => {
 	const winnerStyle = { color: "green", fontWeight: "bolder" };
+
+	const useStyle = createStyles(({ css, token }) => {
+		const { antCls } = token;
+		return {
+			customTable: css`
+				${antCls}-table {
+					${antCls}-table-container {
+						${antCls}-table-body,
+						${antCls}-table-content {
+							scrollbar-width: thin;
+							scrollbar-color: #eaeaea transparent;
+							scrollbar-gutter: stable;
+						}
+					}
+				}
+			`,
+		};
+	});
 
 	const columns: TableProps<Matches>["columns"] = [
 		{
@@ -84,8 +103,12 @@ const MatchHistory = ({ matchesData }: Props) => {
 		},
 		{
 			title: "Time",
-			render: (_, record) => <span>{record.date} at {record.time}</span>,
-      defaultSortOrder: "descend",
+			render: (_, record) => (
+				<span>
+					{record.date} at {record.time}
+				</span>
+			),
+			defaultSortOrder: "descend",
 			sorter: (a, b) => a.match_number - b.match_number,
 		},
 	];
@@ -99,16 +122,20 @@ const MatchHistory = ({ matchesData }: Props) => {
 		console.log("params", pagination, filters, sorter, extra);
 	};
 
+	const { styles } = useStyle();
+
 	return (
 		<>
 			<h2>Matches</h2>
 
 			<Table<Matches>
+				className={styles.customTable}
 				columns={columns}
 				dataSource={matchesData}
 				pagination={false}
 				onChange={onChange}
 				showSorterTooltip={{ target: "full-header" }}
+        scroll={{ y: 85 * 5 }}
 			/>
 		</>
 	);
