@@ -45,7 +45,7 @@ export default function Home() {
 			</section>
 
 			<section aria-label="match-history">
-				<MatchHistory />
+				<MatchHistory matchesData={data.matches}/>
 			</section>
 		</>
 	);
