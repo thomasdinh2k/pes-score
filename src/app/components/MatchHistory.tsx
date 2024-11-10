@@ -15,6 +15,9 @@ const MatchHistory = ({ matchesData }: Props) => {
 			dataIndex: "match_number",
 			key: "match_number",
 			render: (_, __, index) => <span>{index + 1}</span>,
+			showSorterTooltip: { target: "full-header" },
+			defaultSortOrder: "descend",
+			sorter: (a, b) => a.match_number - b.match_number,
 		},
 		{
 			title: "Home Player",
@@ -65,7 +68,7 @@ const MatchHistory = ({ matchesData }: Props) => {
 			title: "Away Team",
 			dataIndex: "away_team",
 			key: "away_team",
-      render: (value, record) => {
+			render: (value, record) => {
 				const isWinner = record.home_score < record.away_score;
 				return <span style={isWinner ? winnerStyle : {}}>{value}</span>;
 			},
@@ -74,13 +77,27 @@ const MatchHistory = ({ matchesData }: Props) => {
 			title: "Away player",
 			dataIndex: "away_player",
 			key: "away_player",
-      render: (value, record) => {
+			render: (value, record) => {
 				const isWinner = record.home_score < record.away_score;
 				return <span style={isWinner ? winnerStyle : {}}>{value}</span>;
 			},
 		},
+		{
+			title: "Time",
+			render: (_, record) => <span>{record.date} at {record.time}</span>,
+      defaultSortOrder: "descend",
+			sorter: (a, b) => a.match_number - b.match_number,
+		},
 	];
 
+	const onChange: TableProps<Matches>["onChange"] = (
+		pagination,
+		filters,
+		sorter,
+		extra
+	) => {
+		console.log("params", pagination, filters, sorter, extra);
+	};
 
 	return (
 		<>
@@ -90,6 +107,8 @@ const MatchHistory = ({ matchesData }: Props) => {
 				columns={columns}
 				dataSource={matchesData}
 				pagination={false}
+				onChange={onChange}
+				showSorterTooltip={{ target: "full-header" }}
 			/>
 		</>
 	);

@@ -23,4 +23,6 @@ export interface Matches {
 	away_player: string;
 	away_team?: string;
 	away_score: number;
+	date: string;
+	time: string;
 }
