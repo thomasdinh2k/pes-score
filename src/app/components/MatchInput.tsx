@@ -11,7 +11,11 @@ function MatchInput({}: Props) {
 
 	const [form] = Form.useForm();
 
-	const currentScore = form.getFieldsValue(["home_score", "away_score"]);
+	let currentScore = {
+		home_score: form.getFieldValue("home_score") || 0,
+		away_score: form.getFieldValue("away_score") || 0,
+	};
+	// currentScore = form.getFieldsValue(["home_score", "away_score"]);
 
 	const handleUpdateScore = (
 		type: any,
@@ -19,30 +23,20 @@ function MatchInput({}: Props) {
 	) => {
 		switch (type) {
 			case "home_score":
-				if (indicator === "increase") {
-					form.setFieldValue(
-						"home_score",
-						currentScore["home_score"]++
-					);
-				} else {
-					form.setFieldValue(
-						"home_score",
-						currentScore["home_score"]--
-					);
-				}
+				form.setFieldValue(
+					"home_score",
+					indicator === "increase"
+						? (currentScore.home_score += 1)
+						: (currentScore.home_score -= 1)
+				);
 				break;
 			case "away_score":
-				if (indicator === "increase") {
-					form.setFieldValue(
-						"away_score",
-						currentScore["away_score"]++
-					);
-				} else {
-					form.setFieldValue(
-						"away_score",
-						currentScore["away_score"]--
-					);
-				}
+				form.setFieldValue(
+					"away_score",
+					indicator === "increase"
+						? (currentScore.away_score += 1)
+						: (currentScore.away_score -= 1)
+				);
 				break;
 			default:
 				break;
@@ -53,7 +47,12 @@ function MatchInput({}: Props) {
 		<div className="match-input">
 			<h2>Match Input</h2>
 
-			<Form layout="vertical" onFinish={handleSubmitForm} form={form}>
+			<Form
+				form={form}
+				layout="vertical"
+				onFinish={handleSubmitForm}
+				initialValues={{ home_score: 0, away_score: 0 }}
+			>
 				{/* Player name */}
 				<FormItem label="Home Player" name="home_player">
 					<Input name="home_player" placeholder="Thomas"></Input>
@@ -65,9 +64,9 @@ function MatchInput({}: Props) {
 					</FormItem>
 					<FormItem label="Score" name="home_score">
 						<InputNumber
-							defaultValue={0}
 							min={0}
 							max={15}
+							defaultValue={0}
 						></InputNumber>
 					</FormItem>
 					<button
@@ -78,9 +77,14 @@ function MatchInput({}: Props) {
 					>
 						+
 					</button>
-					<button className="px-4 border" onClick={() => {
+					<button
+						className="px-4 border"
+						onClick={() => {
 							handleUpdateScore("home_score", "decrease");
-						}}>-</button>
+						}}
+					>
+						-
+					</button>
 				</Space.Compact>
 
 				<FormItem label="Away Player" name="away_player">
@@ -92,17 +96,27 @@ function MatchInput({}: Props) {
 					</FormItem>
 					<FormItem label="Score" name="away_score">
 						<InputNumber
-							defaultValue={0}
 							min={0}
 							max={15}
+							defaultValue={0}
 						></InputNumber>
 					</FormItem>
-					<button className="px-4 border" onClick={() => {
+					<button
+						className="px-4 border"
+						onClick={() => {
 							handleUpdateScore("away_score", "increase");
-						}}>+</button>
-					<button className="px-4 border" onClick={() => {
+						}}
+					>
+						+
+					</button>
+					<button
+						className="px-4 border"
+						onClick={() => {
 							handleUpdateScore("away_score", "decrease");
-						}}>-</button>
+						}}
+					>
+						-
+					</button>
 				</Space.Compact>
 
 				<Form.Item>
