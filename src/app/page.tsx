@@ -87,7 +87,7 @@ export default function Home() {
 				} else if (match.home_score < match.away_score) {
 					awayPlayerData.wins++;
 					homePlayerData.losses++;
-					
+
 					awayPlayerData.points += 3;
 				} else if (match.home_score === match.away_score) {
 					homePlayerData.draws++;
@@ -107,6 +107,25 @@ export default function Home() {
 				awayPlayerData.goal_difference +=
 					match.away_score - match.home_score;
 			});
+
+			/* Ranking player based on
+			1. Points
+			2. Goal Difference
+			3. Goal Scored
+			4. Head to Head (advanced) 
+			*/
+			rankingResult.sort((a, b) => {
+				if (a.points !== b.points) {
+					return b.points - a.points;
+				}
+
+				return b.goal_difference - a.goal_difference;
+			});
+
+			for (let i = 0; i < rankingResult.length; i++) {
+				rankingResult[i].rank = i + 1;
+			}
+
 			return rankingResult;
 		};
 
