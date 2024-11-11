@@ -62,7 +62,25 @@ function MatchInput({}: Props) {
 					<FormItem label="Home Team Name" name="home_team">
 						<Input placeholder="Liverpool..."></Input>
 					</FormItem>
-					<FormItem label="Score" name="home_score">
+					<FormItem
+						label="Score"
+						name="home_score"
+						rules={[
+							{
+								type: "number",
+								min: 0,
+								max: 15,
+							},
+							{
+								validator: (_, value) =>
+									Number.isInteger(value)
+										? Promise.resolve()
+										: Promise.reject(
+												"Score must be an integer"
+										  ),
+							},
+						]}
+					>
 						<InputNumber
 							min={0}
 							max={15}
@@ -94,7 +112,25 @@ function MatchInput({}: Props) {
 					<FormItem label="Away Team Name" name="away_team">
 						<Input placeholder="Liverpool..."></Input>
 					</FormItem>
-					<FormItem label="Score" name="away_score">
+					<FormItem
+						label="Score"
+						name="away_score"
+						rules={[
+							{
+								type: "number",
+								min: 0,
+								max: 15,
+							},
+							{
+								validator: (_, value) =>
+									Number.isInteger(value)
+										? Promise.resolve()
+										: Promise.reject(
+												"Score must be an integer"
+										  ),
+							},
+						]}
+					>
 						<InputNumber
 							min={0}
 							max={15}
