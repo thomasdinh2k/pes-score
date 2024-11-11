@@ -4,16 +4,12 @@ import { Table } from "antd";
 import type { TableProps } from "antd";
 
 const Ranking = ({
-	newRankingData,
 	rankingData,
 	loading,
 }: {
-	newRankingData: PlayerRank[];
 	rankingData: PlayerRank[];
 	loading: boolean;
 }) => {
-	console.log("🪳 ~ file: Ranking.tsx:15 ~ newRankingData||", newRankingData);
-
 	const columns: TableProps<PlayerRank>["columns"] = [
 		{
 			title: "Rank",
@@ -66,16 +62,6 @@ const Ranking = ({
 	return (
 		<>
 			<h2>Ranking</h2>
-			{rankingData && rankingData.length > 0 ? (
-				<p style={{ color: "blue" }}>{JSON.stringify(rankingData)}</p>
-			) : (
-				<p>Loading Ranking Data</p>
-			)}
-			{newRankingData && newRankingData.length > 0 ? (
-				<p>{JSON.stringify(newRankingData)}</p>
-			) : (
-				<p>Loading New Ranking Data...</p>
-			)}
 			<Table<PlayerRank>
 				columns={columns}
 				dataSource={rankingData}

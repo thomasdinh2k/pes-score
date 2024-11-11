@@ -185,8 +185,7 @@ export default function Home() {
 			<section aria-label="ranking">
 				{isShow.ranking && (
 					<Ranking
-						rankingData={data.ranking}
-						newRankingData={rankingData}
+						rankingData={rankingData}
 						loading={loading}
 					/>
 				)}
