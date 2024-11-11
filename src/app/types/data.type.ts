@@ -1,9 +1,9 @@
 export interface FetchedData {
-	ranking: Ranking[];
-	matches: Matches[];
+	ranking: PlayerRank[];
+	matches: Match[];
 }
 
-export interface Ranking {
+export interface PlayerRank {
 	rank: number;
 	player: string;
 	wins: number;
@@ -15,7 +15,7 @@ export interface Ranking {
 	points: number;
 }
 
-export interface Matches {
+export interface Match {
 	match_number: number;
 	home_player: string;
 	home_team?: string;

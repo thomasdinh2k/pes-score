@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import MatchHistory from "./components/MatchHistory";
 import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
-import type { FetchedData } from "./types/data.type";
+import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 import { Skeleton, Space, Switch } from "antd";
 
 export default function Home() {
 	const [data, setData] = useState<FetchedData>();
+	const [rankingData, setRankingData] = useState<PlayerRank[]>();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [isShow, setIsShow] = useState<{
 		ranking: boolean;
@@ -31,7 +32,100 @@ export default function Home() {
 		fetchData();
 	}, []);
 
-	if (loading || !data) {
+	useEffect(() => {
+		// Calculate rankingData
+
+		const calculateData = (matchHistory: Match[]): PlayerRank[] => {
+			debugger;
+			const rankingResult: PlayerRank[] = [];
+
+			const initialData = {
+				rank: 0,
+				wins: 0,
+				draws: 0,
+				losses: 0,
+				goals_for: 0,
+				goals_against: 0,
+				goal_difference: 0,
+				points: 0,
+			};
+
+			matchHistory.forEach((match) => {
+				const n_HomePlayer: string = normalizeWord(match.home_player);
+				const n_awayPlayer: string = normalizeWord(match.away_player);
+
+				// Ensure players exist in the array as objects, not by named keys
+				let homePlayerData = rankingResult.find(
+					(player) => player.player === n_HomePlayer
+				);
+				let awayPlayerData = rankingResult.find(
+					(player) => player.player === n_awayPlayer
+				);
+
+				if (!homePlayerData) {
+					homePlayerData = {
+						player: n_HomePlayer,
+						...initialData,
+					};
+					rankingResult.push(homePlayerData);
+				}
+
+				if (!awayPlayerData) {
+					awayPlayerData = {
+						player: n_awayPlayer,
+						...initialData,
+					};
+					rankingResult.push(awayPlayerData);
+				}
+
+				// Calculate wins/draws/losses
+				if (match.home_score > match.away_score) {
+					homePlayerData.wins++;
+					awayPlayerData.losses++;
+
+					homePlayerData.points += 3;
+				} else if (match.home_score < match.away_score) {
+					awayPlayerData.wins++;
+					homePlayerData.losses++;
+					
+					awayPlayerData.points += 3;
+				} else if (match.home_score === match.away_score) {
+					homePlayerData.draws++;
+					awayPlayerData.draws++;
+					homePlayerData.points++;
+					awayPlayerData.points++;
+				}
+
+				// Calculate goals difference
+				homePlayerData.goals_for += match.home_score;
+				homePlayerData.goals_against += match.away_score;
+				awayPlayerData.goals_for += match.away_score;
+				awayPlayerData.goals_against += match.home_score;
+
+				homePlayerData.goal_difference +=
+					match.home_score - match.away_score;
+				awayPlayerData.goal_difference +=
+					match.away_score - match.home_score;
+			});
+			return rankingResult;
+		};
+
+		if (data && !loading) {
+			const result = calculateData(data.matches);
+			console.log(
+				"🪳 ~ file: page.tsx:97 ~ useEffect ~ result||",
+				result
+			);
+
+			setRankingData(result);
+		}
+	}, [data, loading]);
+
+	const normalizeWord = (word: string): string => {
+		return word.normalize("NFC");
+	};
+
+	if (loading || !data || !rankingData) {
 		return <Skeleton />;
 	}
 
@@ -71,7 +165,11 @@ export default function Home() {
 
 			<section aria-label="ranking">
 				{isShow.ranking && (
-					<Ranking rankingData={data.ranking} loading={loading} />
+					<Ranking
+						rankingData={data.ranking}
+						newRankingData={rankingData}
+						loading={loading}
+					/>
 				)}
 			</section>
 

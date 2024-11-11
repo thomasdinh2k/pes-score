@@ -1,16 +1,20 @@
 "use client";
-import type { Ranking } from "../types/data.type";
+import type { PlayerRank } from "../types/data.type";
 import { Table } from "antd";
 import type { TableProps } from "antd";
 
 const Ranking = ({
+	newRankingData,
 	rankingData,
 	loading,
 }: {
-	rankingData: Ranking[];
+	newRankingData: PlayerRank[];
+	rankingData: PlayerRank[];
 	loading: boolean;
 }) => {
-	const columns: TableProps<Ranking>["columns"] = [
+	console.log("🪳 ~ file: Ranking.tsx:15 ~ newRankingData||", newRankingData);
+
+	const columns: TableProps<PlayerRank>["columns"] = [
 		{
 			title: "Rank",
 			dataIndex: "rank",
@@ -59,13 +63,20 @@ const Ranking = ({
 		},
 	];
 
-	console.log(rankingData);
-
 	return (
 		<>
 			<h2>Ranking</h2>
-
-			<Table<Ranking>
+			{rankingData && rankingData.length > 0 ? (
+				<p style={{ color: "blue" }}>{JSON.stringify(rankingData)}</p>
+			) : (
+				<p>Loading Ranking Data</p>
+			)}
+			{newRankingData && newRankingData.length > 0 ? (
+				<p>{JSON.stringify(newRankingData)}</p>
+			) : (
+				<p>Loading New Ranking Data...</p>
+			)}
+			<Table<PlayerRank>
 				columns={columns}
 				dataSource={rankingData}
 				loading={loading}
