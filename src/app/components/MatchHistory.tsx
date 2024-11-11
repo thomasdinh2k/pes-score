@@ -1,10 +1,10 @@
 import React from "react";
-import type { Matches } from "../types/data.type";
+import type { Match } from "../types/data.type";
 import { Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
 
 type Props = {
-	matchesData: Matches[];
+	matchesData: Match[];
 };
 
 const MatchHistory = ({ matchesData }: Props) => {
@@ -28,7 +28,7 @@ const MatchHistory = ({ matchesData }: Props) => {
 		};
 	});
 
-	const columns: TableProps<Matches>["columns"] = [
+	const columns: TableProps<Match>["columns"] = [
 		{
 			title: "Match",
 			dataIndex: "match_number",
@@ -113,7 +113,7 @@ const MatchHistory = ({ matchesData }: Props) => {
 		},
 	];
 
-	const onChange: TableProps<Matches>["onChange"] = (
+	const onChange: TableProps<Match>["onChange"] = (
 		pagination,
 		filters,
 		sorter,
@@ -127,8 +127,7 @@ const MatchHistory = ({ matchesData }: Props) => {
 	return (
 		<>
 			<h2>Matches</h2>
-
-			<Table<Matches>
+			<Table<Match>
 				className={styles.customTable}
 				columns={columns}
 				dataSource={matchesData}

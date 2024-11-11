@@ -1,5 +1,5 @@
 "use client";
-import type { Ranking } from "../types/data.type";
+import type { PlayerRank } from "../types/data.type";
 import { Table } from "antd";
 import type { TableProps } from "antd";
 
@@ -7,10 +7,10 @@ const Ranking = ({
 	rankingData,
 	loading,
 }: {
-	rankingData: Ranking[];
+	rankingData: PlayerRank[];
 	loading: boolean;
 }) => {
-	const columns: TableProps<Ranking>["columns"] = [
+	const columns: TableProps<PlayerRank>["columns"] = [
 		{
 			title: "Rank",
 			dataIndex: "rank",
@@ -59,13 +59,10 @@ const Ranking = ({
 		},
 	];
 
-	console.log(rankingData);
-
 	return (
 		<>
 			<h2>Ranking</h2>
-
-			<Table<Ranking>
+			<Table<PlayerRank>
 				columns={columns}
 				dataSource={rankingData}
 				loading={loading}
