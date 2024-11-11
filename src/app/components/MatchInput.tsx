@@ -12,9 +12,42 @@ function MatchInput({}: Props) {
 	const [form] = Form.useForm();
 
 	const currentScore = form.getFieldsValue(["home_score", "away_score"]);
-	
-	
 
+	const handleUpdateScore = (
+		type: any,
+		indicator: "increase" | "decrease"
+	) => {
+		switch (type) {
+			case "home_score":
+				if (indicator === "increase") {
+					form.setFieldValue(
+						"home_score",
+						currentScore["home_score"]++
+					);
+				} else {
+					form.setFieldValue(
+						"home_score",
+						currentScore["home_score"]--
+					);
+				}
+				break;
+			case "away_score":
+				if (indicator === "increase") {
+					form.setFieldValue(
+						"away_score",
+						currentScore["away_score"]++
+					);
+				} else {
+					form.setFieldValue(
+						"away_score",
+						currentScore["away_score"]--
+					);
+				}
+				break;
+			default:
+				break;
+		}
+	};
 
 	return (
 		<div className="match-input">
@@ -37,8 +70,17 @@ function MatchInput({}: Props) {
 							max={15}
 						></InputNumber>
 					</FormItem>
-					<button className="px-4 border">+</button>
-					<button className="px-4 border">-</button>
+					<button
+						className="px-4 border"
+						onClick={() => {
+							handleUpdateScore("home_score", "increase");
+						}}
+					>
+						+
+					</button>
+					<button className="px-4 border" onClick={() => {
+							handleUpdateScore("home_score", "decrease");
+						}}>-</button>
 				</Space.Compact>
 
 				<FormItem label="Away Player" name="away_player">
@@ -55,8 +97,12 @@ function MatchInput({}: Props) {
 							max={15}
 						></InputNumber>
 					</FormItem>
-					<button className="px-4 border">+</button>
-					<button className="px-4 border">-</button>
+					<button className="px-4 border" onClick={() => {
+							handleUpdateScore("away_score", "increase");
+						}}>+</button>
+					<button className="px-4 border" onClick={() => {
+							handleUpdateScore("away_score", "decrease");
+						}}>-</button>
 				</Space.Compact>
 
 				<Form.Item>
