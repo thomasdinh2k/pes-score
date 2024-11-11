@@ -1,29 +1,69 @@
 "use client";
-import { Form, Input, Select, Space } from "antd";
-import React from "react";
+import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
+import FormItem from "antd/es/form/FormItem";
 
 type Props = {};
 
 function MatchInput({}: Props) {
-    
-    return (
+	const handleSubmitForm: FormProps["onFinish"] = (values) => {
+		console.log(values);
+	};
+
+	const [form] = Form.useForm();
+
+	const currentScore = form.getFieldsValue(["home_score", "away_score"]);
+	
+	
+
+
+	return (
 		<div className="match-input">
 			<h2>Match Input</h2>
 
-			<Form layout="vertical">
+			<Form layout="vertical" onFinish={handleSubmitForm} form={form}>
 				{/* Player name */}
-				<span className=" font-semibold">Player Home</span>
-				<Input name="player-1-name" placeholder="Thomas"></Input>
+				<FormItem label="Home Player" name="home_player">
+					<Input name="home_player" placeholder="Thomas"></Input>
+				</FormItem>
 
 				<Space.Compact>
-					<Input
-						name="player-1-teamName"
-						placeholder="Liverpool..."
-					></Input>
-					<Input type="number" defaultValue={0}></Input>
-                    <button className="px-4 border">+</button>
-                    <button className="px-4 border">-</button>
+					<FormItem label="Home Team Name" name="home_team">
+						<Input placeholder="Liverpool..."></Input>
+					</FormItem>
+					<FormItem label="Score" name="home_score">
+						<InputNumber
+							defaultValue={0}
+							min={0}
+							max={15}
+						></InputNumber>
+					</FormItem>
+					<button className="px-4 border">+</button>
+					<button className="px-4 border">-</button>
 				</Space.Compact>
+
+				<FormItem label="Away Player" name="away_player">
+					<Input name="away_player" placeholder="Thomas"></Input>
+				</FormItem>
+				<Space.Compact>
+					<FormItem label="Away Team Name" name="away_team">
+						<Input placeholder="Liverpool..."></Input>
+					</FormItem>
+					<FormItem label="Score" name="away_score">
+						<InputNumber
+							defaultValue={0}
+							min={0}
+							max={15}
+						></InputNumber>
+					</FormItem>
+					<button className="px-4 border">+</button>
+					<button className="px-4 border">-</button>
+				</Space.Compact>
+
+				<Form.Item>
+					<Button type="primary" htmlType="submit">
+						Add Result
+					</Button>
+				</Form.Item>
 			</Form>
 		</div>
 	);
