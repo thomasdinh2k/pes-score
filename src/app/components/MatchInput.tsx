@@ -1,4 +1,5 @@
 "use client";
+import { UserOutlined, TrophyOutlined } from "@ant-design/icons";
 import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
@@ -27,7 +28,9 @@ function MatchInput({}: Props) {
 					"home_score",
 					indicator === "increase"
 						? (currentScore.home_score += 1)
-						: (currentScore.home_score > 0 ? currentScore.home_score -= 1 : 0)
+						: currentScore.home_score > 0
+						? (currentScore.home_score -= 1)
+						: 0
 				);
 				break;
 			case "away_score":
@@ -35,7 +38,9 @@ function MatchInput({}: Props) {
 					"away_score",
 					indicator === "increase"
 						? (currentScore.away_score += 1)
-						: (currentScore.away_score > 0 ? currentScore.away_score -= 1 : 0)
+						: currentScore.away_score > 0
+						? (currentScore.away_score -= 1)
+						: 0
 				);
 				break;
 			default:
@@ -55,12 +60,15 @@ function MatchInput({}: Props) {
 			>
 				{/* Player name */}
 				<FormItem label="Home Player" name="home_player">
-					<Input name="home_player" placeholder="Thomas"></Input>
+					<Input name="home_player" placeholder="Thomas" addonBefore={<UserOutlined />}/>
 				</FormItem>
 
 				<Space.Compact>
 					<FormItem label="Home Team Name" name="home_team">
-						<Input placeholder="Liverpool..."></Input>
+						<Input
+							placeholder="Liverpool..."
+							addonBefore={<TrophyOutlined />}
+						/>
 					</FormItem>
 					<FormItem
 						label="Score"
@@ -106,11 +114,11 @@ function MatchInput({}: Props) {
 				</Space.Compact>
 
 				<FormItem label="Away Player" name="away_player">
-					<Input name="away_player" placeholder="Thomas"></Input>
+					<Input name="away_player" placeholder="Thomas" addonBefore={<UserOutlined />} />
 				</FormItem>
 				<Space.Compact>
 					<FormItem label="Away Team Name" name="away_team">
-						<Input placeholder="Liverpool..."></Input>
+						<Input placeholder="Liverpool..." addonBefore={<TrophyOutlined/>} />
 					</FormItem>
 					<FormItem
 						label="Score"
