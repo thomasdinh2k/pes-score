@@ -27,7 +27,7 @@ function MatchInput({}: Props) {
 					"home_score",
 					indicator === "increase"
 						? (currentScore.home_score += 1)
-						: (currentScore.home_score -= 1)
+						: (currentScore.home_score > 0 ? currentScore.home_score -= 1 : 0)
 				);
 				break;
 			case "away_score":
@@ -35,7 +35,7 @@ function MatchInput({}: Props) {
 					"away_score",
 					indicator === "increase"
 						? (currentScore.away_score += 1)
-						: (currentScore.away_score -= 1)
+						: (currentScore.away_score > 0 ? currentScore.away_score -= 1 : 0)
 				);
 				break;
 			default:
