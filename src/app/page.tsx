@@ -18,7 +18,9 @@ export default function Home() {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch("data/ranking.json");
+			const response = await fetch("http://localhost:3000/api/match", {
+				cache: "no-store",
+			});
 			const data = await response.json();
 			setData(data);
 		} catch (error) {
