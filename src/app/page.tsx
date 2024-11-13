@@ -36,7 +36,6 @@ export default function Home() {
 		// Calculate rankingData
 
 		const calculateData = (matchHistory: Match[]): PlayerRank[] => {
-			debugger;
 			const rankingResult: PlayerRank[] = [];
 
 			const initialData = {
