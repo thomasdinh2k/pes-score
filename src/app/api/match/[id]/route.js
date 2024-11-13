@@ -53,3 +53,12 @@ export async function PUT(req, { params }) {
 		return NextResponse.json({ message: error.message }, { status: 400 });
 	}
 }
+
+// Get one particular match
+export async function GET(req, { params }) {
+    const { id } = await params;
+    await connectMongoDB();
+    const match = await Match.findOne({ _id: id });
+
+    return NextResponse.json({ success: true, match });
+}
