@@ -3,6 +3,8 @@ import type { Match } from "../types/data.type";
 import { Button, Modal, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
 import { set } from "mongoose";
+import Match from "../../../models/match";
+import MatchInput from "./MatchInput";
 
 type Props = {
 	matchesData: Match[];
@@ -10,7 +12,10 @@ type Props = {
 
 const MatchHistory = ({ matchesData }: Props) => {
 	const winnerStyle = { color: "green", fontWeight: "bolder" };
-	const [isModalOpen, setIsModalOpen] = React.useState(false);
+	const [isModalOpen, setIsModalOpen] = React.useState({
+		visible: false,
+		currentMatchID: 0,
+	});
 
 	const useStyle = createStyles(({ css, token }) => {
 		const { antCls } = token;
@@ -124,7 +129,14 @@ const MatchHistory = ({ matchesData }: Props) => {
 	];
 
 	const handleShowEditModal = (id: number) => {
-		setIsModalOpen(true);
+		setIsModalOpen({
+			visible: true,
+			currentMatchID: id,
+		});
+	};
+
+	const handleDeleteMatch = (id: number) => {
+		console.log(id);
 	};
 
 	const onChange: TableProps<Match>["onChange"] = (
@@ -141,17 +153,43 @@ const MatchHistory = ({ matchesData }: Props) => {
 	return (
 		<>
 			<Modal
-				title="Vertically centered modal dialog"
+				title="Edit Match History"
 				centered
-				open={isModalOpen}
+				open={isModalOpen.visible}
 				// onOk={() => setModal2Open(false)}
-				onCancel={() => setIsModalOpen(false)}
+				onCancel={() =>
+					setIsModalOpen((prevState) => ({
+						...prevState,
+						visible: false,
+					}))
+				}
+				footer={[
+					<>
+						<Button
+							color="danger"
+							variant="solid"
+							onClick={() => {
+								handleDeleteMatch(isModalOpen.currentMatchID);
+							}}
+						>
+							Delete
+						</Button>
+						<Button
+							onClick={() =>
+								setIsModalOpen((prevState) => ({
+									...prevState,
+									visible: false,
+								}))
+							}
+						>
+							Cancel
+						</Button>
+						,<Button type="primary">Edit</Button>
+					</>,
+				]}
 			>
-				<p>some contents...</p>
-				<p>some contents...</p>
-				<p>some contents...</p>
+				<MatchInput />
 			</Modal>
-
 
 			<h2>Matches</h2>
 			<Table<Match>
