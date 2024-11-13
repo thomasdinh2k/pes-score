@@ -16,6 +16,7 @@ export interface PlayerRank {
 }
 
 export interface Match {
+	_id: number;
 	match_number: number;
 	home_player: string;
 	home_team?: string;

@@ -1,7 +1,8 @@
 import React from "react";
 import type { Match } from "../types/data.type";
-import { Table, TableProps } from "antd";
+import { Button, Modal, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
+import { set } from "mongoose";
 
 type Props = {
 	matchesData: Match[];
@@ -9,6 +10,7 @@ type Props = {
 
 const MatchHistory = ({ matchesData }: Props) => {
 	const winnerStyle = { color: "green", fontWeight: "bolder" };
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
 
 	const useStyle = createStyles(({ css, token }) => {
 		const { antCls } = token;
@@ -111,7 +113,19 @@ const MatchHistory = ({ matchesData }: Props) => {
 			defaultSortOrder: "descend",
 			sorter: (a, b) => a.match_number - b.match_number,
 		},
+		{
+			title: "Action",
+			render: (_, record) => (
+				<Button onClick={() => handleShowEditModal(record._id)}>
+					Edit
+				</Button>
+			),
+		},
 	];
+
+	const handleShowEditModal = (id: number) => {
+		setIsModalOpen(true);
+	};
 
 	const onChange: TableProps<Match>["onChange"] = (
 		pagination,
@@ -126,6 +140,19 @@ const MatchHistory = ({ matchesData }: Props) => {
 
 	return (
 		<>
+			<Modal
+				title="Vertically centered modal dialog"
+				centered
+				open={isModalOpen}
+				// onOk={() => setModal2Open(false)}
+				onCancel={() => setIsModalOpen(false)}
+			>
+				<p>some contents...</p>
+				<p>some contents...</p>
+				<p>some contents...</p>
+			</Modal>
+
+
 			<h2>Matches</h2>
 			<Table<Match>
 				className={styles.customTable}
