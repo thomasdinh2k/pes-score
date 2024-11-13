@@ -55,3 +55,9 @@ export async function POST(req) {
 		);
 	}
 }
+
+export async function GET() {
+    await connectMongoDB();
+    const matches = await Match.find();
+    return NextResponse.json({success: true, matches});
+}
