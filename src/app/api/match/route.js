@@ -57,7 +57,15 @@ export async function POST(req) {
 }
 
 export async function GET() {
-    await connectMongoDB();
-    const matches = await Match.find();
-    return NextResponse.json({success: true, matches});
+	await connectMongoDB();
+	const matches = await Match.find();
+	return NextResponse.json({ success: true, matches });
+}
+
+export async function DELETE(req) {
+	const id = req.nextUrl.searchParams.get("id");
+	await connectMongoDB();
+	await Match.findByIdAndDelete(id);
+
+	return NextResponse.json({ success: true, message: "Match has been deleted!" });
 }
