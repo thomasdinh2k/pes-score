@@ -2,6 +2,7 @@ import React from "react";
 import type { Match } from "../types/data.type";
 import { Button, Modal, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
+
 import MatchInput from "./MatchInput";
 import { deleteAllMatches, deleteMatch } from "../services/data.service";
 
@@ -136,7 +137,7 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 	};
 
 	const handleDeleteMatch = (id: number) => {
-		deleteMatch(id);
+deleteMatch(id);
 
 		if (triggerRefresh) {
 			triggerRefresh();
@@ -154,7 +155,6 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 			triggerRefresh();
 		}
 	}
-
 	const onChange: TableProps<Match>["onChange"] = (
 		pagination,
 		filters,
@@ -204,7 +204,11 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 					</>,
 				]}
 			>
+
 				<MatchInput isEdit />
+
+
+
 			</Modal>
 
 			<h2>Matches</h2>
