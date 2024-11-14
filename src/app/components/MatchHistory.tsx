@@ -134,7 +134,7 @@ const MatchHistory = ({ matchesData }: Props) => {
 				pagination={false}
 				onChange={onChange}
 				showSorterTooltip={{ target: "full-header" }}
-        scroll={{ y: 85 * 5 }}
+        		scroll={{ y: 85 * 5 }}
 			/>
 		</>
 	);
