@@ -2,12 +2,19 @@
 import { UserOutlined, TrophyOutlined } from "@ant-design/icons";
 import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
+import { Match } from "../types/data.type";
 
-type Props = {};
+type Props = { isEdit: boolean };
 
-function MatchInput({}: Props) {
-	const handleSubmitForm: FormProps["onFinish"] = (values) => {
-		console.log(values);
+function MatchInput({
+	isEdit = false,
+}: Props) {
+	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
+		if (isEdit) {
+			console.log("Submitting edit form",values);
+		} else {
+			console.log("Submitting new form",values);
+		}
 	};
 
 	const [form] = Form.useForm();
@@ -59,8 +66,16 @@ function MatchInput({}: Props) {
 				initialValues={{ home_score: 0, away_score: 0 }}
 			>
 				{/* Player name */}
-				<FormItem label="Home Player" name="home_player">
-					<Input name="home_player" placeholder="Thomas" addonBefore={<UserOutlined />}/>
+				<FormItem 
+					label="Home Player" 
+					name="home_player"
+					rules={[{ required: true }]}
+				>
+					<Input
+						name="home_player"
+						placeholder="Thomas"
+						addonBefore={<UserOutlined />}
+					/>
 				</FormItem>
 
 				<Space.Compact>
@@ -113,12 +128,19 @@ function MatchInput({}: Props) {
 					</button>
 				</Space.Compact>
 
-				<FormItem label="Away Player" name="away_player">
-					<Input name="away_player" placeholder="Thomas" addonBefore={<UserOutlined />} />
+				<FormItem label="Away Player" name="away_player" rules={[{ required: true }]}>
+					<Input
+						name="away_player"
+						placeholder="Thomas"
+						addonBefore={<UserOutlined />}
+					/>
 				</FormItem>
 				<Space.Compact>
 					<FormItem label="Away Team Name" name="away_team">
-						<Input placeholder="Liverpool..." addonBefore={<TrophyOutlined/>} />
+						<Input
+							placeholder="Liverpool..."
+							addonBefore={<TrophyOutlined />}
+						/>
 					</FormItem>
 					<FormItem
 						label="Score"
