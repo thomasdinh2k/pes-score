@@ -4,26 +4,29 @@ import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { Match } from "../types/data.type";
 import dayjs from "dayjs";
+import { postMatch } from "../services/data.service";
 
-type Props = { isEdit: boolean };
+type Props = { isEdit?: boolean; matchQuantity?: number };
 
-function MatchInput({ isEdit = false }: Props) {
+function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
 		if (isEdit) {
 			console.log("Submitting edit form", values);
 		} else {
 			const submitPayload = {
 				...values,
+				match_number: matchQuantity + 1,
 				date: dayjs().format("YYYY-MM-DD"),
 				time: dayjs().format("HH:mm"),
 			};
 			console.log("Submitting new form", submitPayload);
+			postMatch(submitPayload);
 		}
 	};
 
 	const [form] = Form.useForm();
 
-	let currentScore = {
+	const currentScore = {
 		home_score: form.getFieldValue("home_score") || 0,
 		away_score: form.getFieldValue("away_score") || 0,
 	};
@@ -61,7 +64,12 @@ function MatchInput({ isEdit = false }: Props) {
 
 	return (
 		<div className="match-input">
-			<h2>Match Input</h2>
+			<h2>
+				Match Input{" "}
+				<span className="text-xs font-thin">
+					(Currently have {matchQuantity})
+				</span>
+			</h2>
 
 			<Form
 				form={form}

@@ -153,7 +153,7 @@ export default function Home() {
 				Thomas&apos;s PES History
 			</h1>
 			<section aria-label="match-input">
-				<MatchInput />
+				<MatchInput matchQuantity={data.matches.length}/>
 			</section>
 
 			<Space direction="horizontal">
