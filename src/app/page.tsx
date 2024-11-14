@@ -1,101 +1,208 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import MatchHistory from "./components/MatchHistory";
+import MatchInput from "./components/MatchInput";
+import Ranking from "./components/Ranking";
+import type { FetchedData, Match, PlayerRank } from "./types/data.type";
+import { Skeleton, Space, Switch } from "antd";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+	const [data, setData] = useState<FetchedData>();
+	const [rankingData, setRankingData] = useState<PlayerRank[]>();
+	const [loading, setLoading] = useState<boolean>(true);
+	const [isShow, setIsShow] = useState<{
+		ranking: boolean;
+		matches: boolean;
+	}>({ ranking: true, matches: true });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	const fetchData = async () => {
+		try {
+			const response = await fetch("http://localhost:3000/api/match", {
+				cache: "no-store",
+			});
+			const data = await response.json();
+
+			if (!data || data.success === false) {
+				throw new Error("Failed to fetch match data");
+			}
+
+			setData(data);
+			setLoading(false);
+		} catch (error) {
+			console.error(error);
+		}
+
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, [loading]);
+
+	useEffect(() => {
+		// Calculate rankingData
+
+		const calculateData = (matchHistory: Match[]): PlayerRank[] => {
+			const rankingResult: PlayerRank[] = [];
+
+			const initialData = {
+				rank: 0,
+				wins: 0,
+				draws: 0,
+				losses: 0,
+				goals_for: 0,
+				goals_against: 0,
+				goal_difference: 0,
+				points: 0,
+			};
+
+			matchHistory.forEach((match) => {
+				const n_HomePlayer: string = normalizeWord(match.home_player);
+				const n_awayPlayer: string = normalizeWord(match.away_player);
+
+				// Ensure players exist in the array as objects, not by named keys
+				let homePlayerData = rankingResult.find(
+					(player) => player.player === n_HomePlayer
+				);
+				let awayPlayerData = rankingResult.find(
+					(player) => player.player === n_awayPlayer
+				);
+
+				if (!homePlayerData) {
+					homePlayerData = {
+						player: n_HomePlayer,
+						...initialData,
+					};
+					rankingResult.push(homePlayerData);
+				}
+
+				if (!awayPlayerData) {
+					awayPlayerData = {
+						player: n_awayPlayer,
+						...initialData,
+					};
+					rankingResult.push(awayPlayerData);
+				}
+
+				// Calculate wins/draws/losses
+				if (match.home_score > match.away_score) {
+					homePlayerData.wins++;
+					awayPlayerData.losses++;
+
+					homePlayerData.points += 3;
+				} else if (match.home_score < match.away_score) {
+					awayPlayerData.wins++;
+					homePlayerData.losses++;
+
+					awayPlayerData.points += 3;
+				} else if (match.home_score === match.away_score) {
+					homePlayerData.draws++;
+					awayPlayerData.draws++;
+					homePlayerData.points++;
+					awayPlayerData.points++;
+				}
+
+				// Calculate goals difference
+				homePlayerData.goals_for += match.home_score;
+				homePlayerData.goals_against += match.away_score;
+				awayPlayerData.goals_for += match.away_score;
+				awayPlayerData.goals_against += match.home_score;
+
+				homePlayerData.goal_difference +=
+					match.home_score - match.away_score;
+				awayPlayerData.goal_difference +=
+					match.away_score - match.home_score;
+			});
+
+			/* Ranking player based on
+			1. Points
+			2. Goal Difference
+			3. Goal Scored
+			4. Head to Head (advanced) 
+			*/
+			rankingResult.sort((a, b) => {
+				if (a.points !== b.points) {
+					return b.points - a.points;
+				}
+
+				return b.goal_difference - a.goal_difference;
+			});
+
+			for (let i = 0; i < rankingResult.length; i++) {
+				rankingResult[i].rank = i + 1;
+			}
+
+			return rankingResult;
+		};
+
+		if (data && !loading) {
+			const result = calculateData(data.matches);
+			console.log(
+				"🪳 ~ file: page.tsx:97 ~ useEffect ~ result||",
+				result
+			);
+
+			setRankingData(result);
+		}
+	}, [data, loading]);
+
+	const normalizeWord = (word: string): string => {
+		return word.normalize("NFC");
+	};
+
+	const triggerRefresh = () => {
+		setLoading(true);
+		// setLoading(false);
+		setTimeout(() => setLoading(false), 100);
+	};
+
+	if (loading || !data || !rankingData) {
+		return <Skeleton />;
+	}
+
+	return (
+		<>
+			<h1 className="text-center font-bold my-5">
+				Thomas&apos;s PES History
+			</h1>
+			<section aria-label="match-input">
+				<MatchInput matchQuantity={data.matches.length} triggerRefresh={triggerRefresh}/>
+			</section>
+
+			<Space direction="horizontal">
+				<Switch
+					checkedChildren="Show Ranking"
+					unCheckedChildren="Hide Ranking"
+					defaultChecked
+					onChange={(checked) =>
+						setIsShow((prevState) => ({
+							...prevState,
+							ranking: checked,
+						}))
+					}
+				/>
+				<Switch
+					checkedChildren="Show Matches"
+					unCheckedChildren="Hide Matches"
+					defaultChecked
+					onChange={(checked) =>
+						setIsShow((prevState) => ({
+							...prevState,
+							matches: checked,
+						}))
+					}
+				/>
+			</Space>
+
+			<section aria-label="ranking">
+				{isShow.ranking && (
+					<Ranking rankingData={rankingData} loading={loading} />
+				)}
+			</section>
+
+			<section aria-label="match-history">
+				{isShow.matches && <MatchHistory matchesData={data.matches} triggerRefresh={triggerRefresh}/>}
+			</section>
+		</>
+	);
 }
