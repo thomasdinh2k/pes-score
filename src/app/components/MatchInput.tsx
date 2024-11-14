@@ -111,6 +111,7 @@ function MatchInput({
 						></InputNumber>
 					</FormItem>
 					<button
+						type="button"
 						className="px-4 border"
 						onClick={() => {
 							handleUpdateScore("home_score", "increase");
@@ -119,6 +120,7 @@ function MatchInput({
 						+
 					</button>
 					<button
+						type="button"
 						className="px-4 border"
 						onClick={() => {
 							handleUpdateScore("home_score", "decrease");
@@ -168,6 +170,7 @@ function MatchInput({
 						></InputNumber>
 					</FormItem>
 					<button
+						type="button"
 						className="px-4 border"
 						onClick={() => {
 							handleUpdateScore("away_score", "increase");
@@ -176,6 +179,7 @@ function MatchInput({
 						+
 					</button>
 					<button
+						type="button"
 						className="px-4 border"
 						onClick={() => {
 							handleUpdateScore("away_score", "decrease");
