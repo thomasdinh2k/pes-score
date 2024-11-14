@@ -18,7 +18,8 @@ export default function Home() {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch("http://localhost:3000/api/match", {
+			const API = process.env.NEXT_PUBLIC_API_URL;
+			const response = await fetch(`${API}/api/match`, {
 				cache: "no-store",
 			});
 			const data = await response.json();
@@ -32,7 +33,6 @@ export default function Home() {
 		} catch (error) {
 			console.error(error);
 		}
-
 	};
 
 	useEffect(() => {
@@ -166,7 +166,10 @@ export default function Home() {
 				Thomas&apos;s PES History
 			</h1>
 			<section aria-label="match-input">
-				<MatchInput matchQuantity={data.matches.length} triggerRefresh={triggerRefresh}/>
+				<MatchInput
+					matchQuantity={data.matches.length}
+					triggerRefresh={triggerRefresh}
+				/>
 			</section>
 
 			<Space direction="horizontal">
@@ -201,7 +204,12 @@ export default function Home() {
 			</section>
 
 			<section aria-label="match-history">
-				{isShow.matches && <MatchHistory matchesData={data.matches} triggerRefresh={triggerRefresh}/>}
+				{isShow.matches && (
+					<MatchHistory
+						matchesData={data.matches}
+						triggerRefresh={triggerRefresh}
+					/>
+				)}
 			</section>
 		</>
 	);
