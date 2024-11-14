@@ -31,12 +31,12 @@ export default function Home() {
 			setLoading(false);
 		} catch (error) {
 			console.error(error);
-		} 
+		}
 	};
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [loading]);
 
 	useEffect(() => {
 		// Calculate rankingData
@@ -149,6 +149,12 @@ export default function Home() {
 		return word.normalize("NFC");
 	};
 
+	const triggerRefresh = () => {
+		setLoading(true);
+		// setLoading(false);
+		setTimeout(() => setLoading(false), 100);
+	};
+
 	if (loading || !data || !rankingData) {
 		return <Skeleton />;
 	}
@@ -159,7 +165,7 @@ export default function Home() {
 				Thomas&apos;s PES History
 			</h1>
 			<section aria-label="match-input">
-				<MatchInput matchQuantity={data.matches.length}/>
+				<MatchInput matchQuantity={data.matches.length} triggerRefresh={triggerRefresh}/>
 			</section>
 
 			<Space direction="horizontal">
