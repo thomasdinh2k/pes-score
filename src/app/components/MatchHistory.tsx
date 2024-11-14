@@ -19,6 +19,7 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 	});
 
 	const useStyle = createStyles(({ css, token }) => {
+		// @ts-expect-error token is defined
 		const { antCls } = token;
 		return {
 			customTable: css`
