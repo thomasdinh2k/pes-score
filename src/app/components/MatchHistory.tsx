@@ -3,7 +3,7 @@ import type { Match } from "../types/data.type";
 import { Button, Modal, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
 import MatchInput from "./MatchInput";
-import { deleteMatch } from "../services/data.service";
+import { deleteAllMatches, deleteMatch } from "../services/data.service";
 
 type Props = {
 	matchesData: Match[];
@@ -137,7 +137,7 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 
 	const handleDeleteMatch = (id: number) => {
 		deleteMatch(id);
-		
+
 		if (triggerRefresh) {
 			triggerRefresh();
 		}
@@ -146,6 +146,14 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 			visible: false,
 		}));
 	};
+
+	const handleDeleteAllMatches = () => {
+		deleteAllMatches();
+
+		if (triggerRefresh) {
+			triggerRefresh();
+		}
+	}
 
 	const onChange: TableProps<Match>["onChange"] = (
 		pagination,
@@ -200,6 +208,13 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 			</Modal>
 
 			<h2>Matches</h2>
+			<Button
+				color="danger"
+				variant="solid"
+				onClick={handleDeleteAllMatches}
+			>
+				CLEAR
+			</Button>
 			<Table<Match>
 				className={styles.customTable}
 				columns={columns}
