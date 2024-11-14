@@ -18,16 +18,18 @@ export default function Home() {
 
 	const fetchData = async () => {
 		try {
-
 			if (!process.env) {
 				throw new Error(
 					"process.env.NEXT_PUBLIC_API_URL is not defined"
-				)
+				);
 			}
-
-			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
-				cache: "no-store",
-			});
+			//http://localhost:3000/api/match
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_URL}/api/match`,
+				{
+					cache: "no-store",
+				}
+			);
 			const data = await response.json();
 
 			if (!data || data.success === false) {
