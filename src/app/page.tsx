@@ -23,9 +23,12 @@ export default function Home() {
 					"process.env.NEXT_PUBLIC_API_URL is not defined"
 				);
 			}
+			const testENV = window.location.href;
+			console.log('🪳 ~ file: page.tsx:27 ~ fetchData ~ testENV||', testENV);
+
 			//http://localhost:3000/api/match
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/api/match`,
+				`${testENV}/api/match`,
 				{
 					cache: "no-store",
 				}
