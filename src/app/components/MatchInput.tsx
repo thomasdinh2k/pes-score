@@ -23,7 +23,8 @@ function MatchInput({
 		} else {
 			const submitPayload = {
 				...values,
-				match_number: matchQuantity + 1,
+				match_number: Math.floor(Math.random() * 1000000),
+
 				date: dayjs().format("YYYY-MM-DD"),
 				time: dayjs().format("HH:mm"),
 			};
@@ -44,7 +45,7 @@ function MatchInput({
 	// currentScore = form.getFieldsValue(["home_score", "away_score"]);
 
 	const handleUpdateScoreInput = (
-		type: any,
+		type: 'home_score' | 'away_score',
 		indicator: "increase" | "decrease"
 	) => {
 		switch (type) {
