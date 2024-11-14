@@ -3,17 +3,21 @@ import { UserOutlined, TrophyOutlined } from "@ant-design/icons";
 import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { Match } from "../types/data.type";
+import dayjs from "dayjs";
 
 type Props = { isEdit: boolean };
 
-function MatchInput({
-	isEdit = false,
-}: Props) {
+function MatchInput({ isEdit = false }: Props) {
 	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
 		if (isEdit) {
-			console.log("Submitting edit form",values);
+			console.log("Submitting edit form", values);
 		} else {
-			console.log("Submitting new form",values);
+			const submitPayload = {
+				...values,
+				date: dayjs().format("YYYY-MM-DD"),
+				time: dayjs().format("HH:mm"),
+			};
+			console.log("Submitting new form", submitPayload);
 		}
 	};
 
@@ -25,7 +29,7 @@ function MatchInput({
 	};
 	// currentScore = form.getFieldsValue(["home_score", "away_score"]);
 
-	const handleUpdateScore = (
+	const handleUpdateScoreInput = (
 		type: any,
 		indicator: "increase" | "decrease"
 	) => {
@@ -66,8 +70,8 @@ function MatchInput({
 				initialValues={{ home_score: 0, away_score: 0 }}
 			>
 				{/* Player name */}
-				<FormItem 
-					label="Home Player" 
+				<FormItem
+					label="Home Player"
 					name="home_player"
 					rules={[{ required: true }]}
 				>
@@ -114,7 +118,7 @@ function MatchInput({
 						type="button"
 						className="px-4 border"
 						onClick={() => {
-							handleUpdateScore("home_score", "increase");
+							handleUpdateScoreInput("home_score", "increase");
 						}}
 					>
 						+
@@ -123,14 +127,18 @@ function MatchInput({
 						type="button"
 						className="px-4 border"
 						onClick={() => {
-							handleUpdateScore("home_score", "decrease");
+							handleUpdateScoreInput("home_score", "decrease");
 						}}
 					>
 						-
 					</button>
 				</Space.Compact>
 
-				<FormItem label="Away Player" name="away_player" rules={[{ required: true }]}>
+				<FormItem
+					label="Away Player"
+					name="away_player"
+					rules={[{ required: true }]}
+				>
 					<Input
 						name="away_player"
 						placeholder="Thomas"
@@ -173,7 +181,7 @@ function MatchInput({
 						type="button"
 						className="px-4 border"
 						onClick={() => {
-							handleUpdateScore("away_score", "increase");
+							handleUpdateScoreInput("away_score", "increase");
 						}}
 					>
 						+
@@ -182,7 +190,7 @@ function MatchInput({
 						type="button"
 						className="px-4 border"
 						onClick={() => {
-							handleUpdateScore("away_score", "decrease");
+							handleUpdateScoreInput("away_score", "decrease");
 						}}
 					>
 						-
