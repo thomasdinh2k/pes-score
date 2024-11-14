@@ -18,7 +18,14 @@ export default function Home() {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+
+			if (!process.env) {
+				throw new Error(
+					"process.env.NEXT_PUBLIC_API_URL is not defined"
+				)
+			}
+
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
 				cache: "no-store",
 			});
 			const data = await response.json();
@@ -32,7 +39,6 @@ export default function Home() {
 		} catch (error) {
 			console.error(error);
 		}
-
 	};
 
 	useEffect(() => {
@@ -166,7 +172,10 @@ export default function Home() {
 				Thomas&apos;s PES History
 			</h1>
 			<section aria-label="match-input">
-				<MatchInput matchQuantity={data.matches.length} triggerRefresh={triggerRefresh}/>
+				<MatchInput
+					matchQuantity={data.matches.length}
+					triggerRefresh={triggerRefresh}
+				/>
 			</section>
 
 			<Space direction="horizontal">
@@ -201,7 +210,12 @@ export default function Home() {
 			</section>
 
 			<section aria-label="match-history">
-				{isShow.matches && <MatchHistory matchesData={data.matches} triggerRefresh={triggerRefresh}/>}
+				{isShow.matches && (
+					<MatchHistory
+						matchesData={data.matches}
+						triggerRefresh={triggerRefresh}
+					/>
+				)}
 			</section>
 		</>
 	);
