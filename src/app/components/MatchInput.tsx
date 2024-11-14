@@ -44,7 +44,7 @@ function MatchInput({
 	// currentScore = form.getFieldsValue(["home_score", "away_score"]);
 
 	const handleUpdateScoreInput = (
-		type: any,
+		type: 'home_score' | 'away_score',
 		indicator: "increase" | "decrease"
 	) => {
 		switch (type) {

@@ -17,8 +17,12 @@ export const postMatch = async (matchInfo: Match) => {
 		}
 
 		return data;
-	} catch (error: any) {
-		throw new Error(error.message);
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		} else {
+			throw new Error("An unexpected error occurred.");
+		}
 	}
 };
 
@@ -39,8 +43,12 @@ export const deleteMatch = async (id: number) => {
 		}
 
 		return data;
-	} catch (error: any) {
-		throw new Error(error.message);
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		} else {
+			throw new Error("An unexpected error occurred.");
+		}
 	}
 };
 
@@ -62,6 +70,10 @@ export const deleteAllMatches = async () => {
 			throw new Error(data.message);
 		}
 	} catch (error) {
-		throw new Error(error.message);
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		} else {
+			throw new Error("An unexpected error occurred.");
+		}
 	}
 };
