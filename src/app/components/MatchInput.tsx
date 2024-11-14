@@ -23,7 +23,7 @@ function MatchInput({
 		} else {
 			const submitPayload = {
 				...values,
-				match_number: matchQuantity + 1,
+				match_number: Math.floor(Math.random() * 1000000),
 				date: dayjs().format("YYYY-MM-DD"),
 				time: dayjs().format("HH:mm"),
 			};
