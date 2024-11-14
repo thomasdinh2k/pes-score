@@ -18,7 +18,7 @@ export default function Home() {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch("http://localhost:3000/api/match", {
+			const response = await fetch(process.env.NEXT_PUBLIC_API_URL, {
 				cache: "no-store",
 			});
 			const data = await response.json();
