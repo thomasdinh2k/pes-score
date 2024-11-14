@@ -2,15 +2,15 @@ import React from "react";
 import type { Match } from "../types/data.type";
 import { Button, Modal, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
-import { set } from "mongoose";
-import Match from "../../../models/match";
 import MatchInput from "./MatchInput";
+import { deleteMatch } from "../services/data.service";
 
 type Props = {
 	matchesData: Match[];
+	triggerRefresh?: () => void;
 };
 
-const MatchHistory = ({ matchesData }: Props) => {
+const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 	const winnerStyle = { color: "green", fontWeight: "bolder" };
 	const [isModalOpen, setIsModalOpen] = React.useState({
 		visible: false,
@@ -136,7 +136,15 @@ const MatchHistory = ({ matchesData }: Props) => {
 	};
 
 	const handleDeleteMatch = (id: number) => {
-		console.log(id);
+		deleteMatch(id);
+		
+		if (triggerRefresh) {
+			triggerRefresh();
+		}
+		setIsModalOpen((prevState) => ({
+			...prevState,
+			visible: false,
+		}));
 	};
 
 	const onChange: TableProps<Match>["onChange"] = (
@@ -188,7 +196,7 @@ const MatchHistory = ({ matchesData }: Props) => {
 					</>,
 				]}
 			>
-				<MatchInput />
+				<MatchInput isEdit />
 			</Modal>
 
 			<h2>Matches</h2>
@@ -199,7 +207,7 @@ const MatchHistory = ({ matchesData }: Props) => {
 				pagination={false}
 				onChange={onChange}
 				showSorterTooltip={{ target: "full-header" }}
-        		scroll={{ y: 85 * 5 }}
+				scroll={{ y: 85 * 5 }}
 			/>
 		</>
 	);

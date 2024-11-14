@@ -6,9 +6,17 @@ import { Match } from "../types/data.type";
 import dayjs from "dayjs";
 import { postMatch } from "../services/data.service";
 
-type Props = { isEdit?: boolean; matchQuantity?: number; triggerRefresh?: () => void };
+type Props = {
+	isEdit?: boolean;
+	matchQuantity?: number;
+	triggerRefresh?: () => void;
+};
 
-function MatchInput({ isEdit = false, matchQuantity = 0, triggerRefresh }: Props) {
+function MatchInput({
+	isEdit = false,
+	matchQuantity = 0,
+	triggerRefresh,
+}: Props) {
 	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
 		if (isEdit) {
 			console.log("Submitting edit form", values);
@@ -67,12 +75,14 @@ function MatchInput({ isEdit = false, matchQuantity = 0, triggerRefresh }: Props
 
 	return (
 		<div className="match-input">
-			<h2>
-				Match Input{" "}
-				<span className="text-xs font-thin">
-					(Currently have {matchQuantity})
-				</span>
-			</h2>
+			{!isEdit && (
+				<h2>
+					Match Input{" "}
+					<span className="text-xs font-thin">
+						(Currently have {matchQuantity})
+					</span>
+				</h2>
+			)}
 
 			<Form
 				form={form}

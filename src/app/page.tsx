@@ -200,7 +200,7 @@ export default function Home() {
 			</section>
 
 			<section aria-label="match-history">
-				{isShow.matches && <MatchHistory matchesData={data.matches} />}
+				{isShow.matches && <MatchHistory matchesData={data.matches} triggerRefresh={triggerRefresh}/>}
 			</section>
 		</>
 	);
