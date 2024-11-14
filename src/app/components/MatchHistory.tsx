@@ -1,7 +1,10 @@
 import React from "react";
 import type { Match } from "../types/data.type";
-import { Table, TableProps } from "antd";
+import { Button, Modal, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
+import { set } from "mongoose";
+import Match from "../../../models/match";
+import MatchInput from "./MatchInput";
 
 type Props = {
 	matchesData: Match[];
@@ -9,6 +12,10 @@ type Props = {
 
 const MatchHistory = ({ matchesData }: Props) => {
 	const winnerStyle = { color: "green", fontWeight: "bolder" };
+	const [isModalOpen, setIsModalOpen] = React.useState({
+		visible: false,
+		currentMatchID: 0,
+	});
 
 	const useStyle = createStyles(({ css, token }) => {
 		const { antCls } = token;
@@ -111,7 +118,26 @@ const MatchHistory = ({ matchesData }: Props) => {
 			defaultSortOrder: "descend",
 			sorter: (a, b) => a.match_number - b.match_number,
 		},
+		{
+			title: "Action",
+			render: (_, record) => (
+				<Button onClick={() => handleShowEditModal(record._id)}>
+					Edit
+				</Button>
+			),
+		},
 	];
+
+	const handleShowEditModal = (id: number) => {
+		setIsModalOpen({
+			visible: true,
+			currentMatchID: id,
+		});
+	};
+
+	const handleDeleteMatch = (id: number) => {
+		console.log(id);
+	};
 
 	const onChange: TableProps<Match>["onChange"] = (
 		pagination,
@@ -126,6 +152,45 @@ const MatchHistory = ({ matchesData }: Props) => {
 
 	return (
 		<>
+			<Modal
+				title="Edit Match History"
+				centered
+				open={isModalOpen.visible}
+				// onOk={() => setModal2Open(false)}
+				onCancel={() =>
+					setIsModalOpen((prevState) => ({
+						...prevState,
+						visible: false,
+					}))
+				}
+				footer={[
+					<>
+						<Button
+							color="danger"
+							variant="solid"
+							onClick={() => {
+								handleDeleteMatch(isModalOpen.currentMatchID);
+							}}
+						>
+							Delete
+						</Button>
+						<Button
+							onClick={() =>
+								setIsModalOpen((prevState) => ({
+									...prevState,
+									visible: false,
+								}))
+							}
+						>
+							Cancel
+						</Button>
+						,<Button type="primary">Edit</Button>
+					</>,
+				]}
+			>
+				<MatchInput />
+			</Modal>
+
 			<h2>Matches</h2>
 			<Table<Match>
 				className={styles.customTable}

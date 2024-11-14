@@ -18,14 +18,20 @@ export default function Home() {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch("data/ranking.json");
+			const response = await fetch("http://localhost:3000/api/match", {
+				cache: "no-store",
+			});
 			const data = await response.json();
+
+			if (!data || data.success === false) {
+				throw new Error("Failed to fetch match data");
+			}
+
 			setData(data);
+			setLoading(false);
 		} catch (error) {
 			console.error(error);
-		} finally {
-			setLoading(false);
-		}
+		} 
 	};
 
 	useEffect(() => {
@@ -183,10 +189,7 @@ export default function Home() {
 
 			<section aria-label="ranking">
 				{isShow.ranking && (
-					<Ranking
-						rankingData={rankingData}
-						loading={loading}
-					/>
+					<Ranking rankingData={rankingData} loading={loading} />
 				)}
 			</section>
 
