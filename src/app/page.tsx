@@ -133,9 +133,7 @@ export default function Home() {
 	};
 
 	const triggerRefresh = () => {
-		setLoading(true);
-		// setLoading(false);
-		setTimeout(() => setLoading(false), 100);
+		window.location.reload();
 	};
 
 	if (loading || !data || !rankingData) {
