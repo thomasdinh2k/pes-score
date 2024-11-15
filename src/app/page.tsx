@@ -1,14 +1,29 @@
 "use client";
 
+import { Space } from "antd";
+import { Switch } from "antd-mobile";
 import { useEffect, useState } from "react";
+import Loading from "./components/Loading";
 import MatchHistory from "./components/MatchHistory";
 import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
-import type { FetchedData, Match, PlayerRank } from "./types/data.type";
-import { Space, Switch } from "antd";
 import { getAllMatches } from "./services/data.service";
-import Loading from "./components/Loading";
+import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 
+/**
+ * The main page of the application, responsible for rendering the match history table,
+ * the ranking table, and the match input form.
+ *
+ * The page fetches data from the server and stores it in the component state.
+ * It also handles the business logic of ranking the players based on the match history.
+ *
+ * The page renders the following components:
+ * - MatchInput: a form for inputting new matches
+ * - Ranking: a table displaying the ranking of the players
+ * - MatchHistory: a table displaying the match history
+ *
+ * The page also handles the state of whether the ranking and match history tables are shown or not.
+ */
 export default function Home() {
 	const [data, setData] = useState<FetchedData>();
 	const [rankingData, setRankingData] = useState<PlayerRank[]>();
@@ -147,15 +162,13 @@ export default function Home() {
 				Thomas&apos;s PES History
 			</h1>
 			<section aria-label="match-input">
-				<MatchInput
-					matchQuantity={data.matches.length}
-				/>
+				<MatchInput matchQuantity={data.matches.length} />
 			</section>
 
 			<Space direction="horizontal">
 				<Switch
-					checkedChildren="Show Ranking"
-					unCheckedChildren="Hide Ranking"
+					checkedText="Show Ranking"
+					uncheckedText="Hide Ranking"
 					defaultChecked
 					onChange={(checked) =>
 						setIsShow((prevState) => ({
@@ -165,8 +178,8 @@ export default function Home() {
 					}
 				/>
 				<Switch
-					checkedChildren="Show Matches"
-					unCheckedChildren="Hide Matches"
+					checkedText="Show Matches"
+					uncheckedText="Hide Matches"
 					defaultChecked
 					onChange={(checked) =>
 						setIsShow((prevState) => ({
