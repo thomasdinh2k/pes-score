@@ -5,8 +5,9 @@ import MatchHistory from "./components/MatchHistory";
 import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
 import type { FetchedData, Match, PlayerRank } from "./types/data.type";
-import { Skeleton, Space, Switch } from "antd";
+import { Space, Switch } from "antd";
 import { getAllMatches } from "./services/data.service";
+import Loading from "./components/Loading";
 
 export default function Home() {
 	const [data, setData] = useState<FetchedData>();
@@ -137,7 +138,7 @@ export default function Home() {
 	};
 
 	if (loading || !data || !rankingData) {
-		return <Skeleton />;
+		return <Loading />;
 	}
 
 	return (
