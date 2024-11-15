@@ -10,6 +10,11 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
+    "@atlaskit/css-reset": "^6.11.2",
+    "@atlaskit/lozenge": "^11.12.2",
+    "@atlaskit/spinner": "^16.3.3",
+    "@atlaskit/tokens": "^2.2.0",
+    "@emotion/react": "^11.13.3",
     "antd": "^5.21.6",
     "antd-style": "^3.7.1",
     "dayjs": "^1.11.13",
