@@ -5,18 +5,15 @@ import FormItem from "antd/es/form/FormItem";
 import { Match } from "../types/data.type";
 import dayjs from "dayjs";
 import { postMatch } from "../services/data.service";
-
 type Props = {
 	isEdit?: boolean;
 	matchQuantity?: number;
-	triggerRefresh?: () => void;
 };
 
-function MatchInput({
-	isEdit = false,
-	matchQuantity = 0,
-	triggerRefresh,
-}: Props) {
+function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
+	const triggerRefresh = () => {
+		window.location.reload();
+	};
 	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
 		if (isEdit) {
 			console.log("Submitting edit form", values);
@@ -30,9 +27,8 @@ function MatchInput({
 			};
 			console.log("Submitting new form", submitPayload);
 			postMatch(submitPayload);
-			if (triggerRefresh) {
-				triggerRefresh();
-			}
+
+			triggerRefresh();
 		}
 	};
 
@@ -45,7 +41,7 @@ function MatchInput({
 	// currentScore = form.getFieldsValue(["home_score", "away_score"]);
 
 	const handleUpdateScoreInput = (
-		type: 'home_score' | 'away_score',
+		type: "home_score" | "away_score",
 		indicator: "increase" | "decrease"
 	) => {
 		switch (type) {

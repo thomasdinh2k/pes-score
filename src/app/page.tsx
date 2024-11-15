@@ -6,6 +6,7 @@ import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
 import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 import { Skeleton, Space, Switch } from "antd";
+import { getAllMatches } from "./services/data.service";
 
 export default function Home() {
 	const [data, setData] = useState<FetchedData>();
@@ -16,28 +17,14 @@ export default function Home() {
 		matches: boolean;
 	}>({ ranking: true, matches: true });
 
-	const fetchData = async () => {
-		try {
-			const API = process.env.NEXT_PUBLIC_API_URL;
-			const response = await fetch(`${API}/api/match`, {
-				cache: "no-store",
-			});
-			const data = await response.json();
-
-			if (!data || data.success === false) {
-				throw new Error("Failed to fetch match data");
-			}
-
-			setData(data);
-			setLoading(false);
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
 	useEffect(() => {
-		fetchData();
-	}, [loading]);
+		getAllMatches().then((data) => {
+			if (data) {
+				setData(data);
+				setLoading(false);
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		// Calculate rankingData
@@ -137,11 +124,6 @@ export default function Home() {
 
 		if (data && !loading) {
 			const result = calculateData(data.matches);
-			console.log(
-				"🪳 ~ file: page.tsx:97 ~ useEffect ~ result||",
-				result
-			);
-
 			setRankingData(result);
 		}
 	}, [data, loading]);
@@ -151,9 +133,7 @@ export default function Home() {
 	};
 
 	const triggerRefresh = () => {
-		setLoading(true);
-		// setLoading(false);
-		setTimeout(() => setLoading(false), 100);
+		window.location.reload();
 	};
 
 	if (loading || !data || !rankingData) {
@@ -168,7 +148,6 @@ export default function Home() {
 			<section aria-label="match-input">
 				<MatchInput
 					matchQuantity={data.matches.length}
-					triggerRefresh={triggerRefresh}
 				/>
 			</section>
 
