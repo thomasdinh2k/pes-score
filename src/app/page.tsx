@@ -148,7 +148,6 @@ export default function Home() {
 			<section aria-label="match-input">
 				<MatchInput
 					matchQuantity={data.matches.length}
-					triggerRefresh={triggerRefresh}
 				/>
 			</section>
 
