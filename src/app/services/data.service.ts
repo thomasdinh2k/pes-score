@@ -1,6 +1,26 @@
-import { Match } from "../types/data.type";
+import type { FetchedData, Match } from "../types/data.type";
 
-// POST new match data
+export const getAllMatches = async (): Promise<FetchedData> => {
+	try {
+		const res = await fetch("http://localhost:3000/api/match", {
+			cache: "no-store",
+		})
+
+		const data = await res.json();
+
+		if (!data || data.success === false) {
+			throw new Error("Failed to fetch match data");
+		}
+
+		return data;
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		} else {
+			throw new Error("An unexpected error occurred.");
+		}
+	}
+}
 export const postMatch = async (matchInfo: Match) => {
 	try {
 		const res = await fetch("http://localhost:3000/api/match", {
