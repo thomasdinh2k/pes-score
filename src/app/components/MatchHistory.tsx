@@ -1,10 +1,10 @@
-import React from "react";
-import type { Match } from "../types/data.type";
 import { Button, Modal, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
+import React from "react";
+import type { Match } from "../types/data.type";
 
-import MatchInput from "./MatchInput";
 import { deleteAllMatches, deleteMatch } from "../services/data.service";
+import MatchInput from "./MatchInput";
 
 type Props = {
 	matchesData: Match[];
@@ -138,7 +138,7 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 	};
 
 	const handleDeleteMatch = (id: number) => {
-deleteMatch(id);
+		deleteMatch(id);
 
 		if (triggerRefresh) {
 			triggerRefresh();
@@ -155,7 +155,7 @@ deleteMatch(id);
 		if (triggerRefresh) {
 			triggerRefresh();
 		}
-	}
+	};
 	const onChange: TableProps<Match>["onChange"] = (
 		pagination,
 		filters,
@@ -205,11 +205,7 @@ deleteMatch(id);
 					</>,
 				]}
 			>
-
 				<MatchInput isEdit />
-
-
-
 			</Modal>
 
 			<h2>Matches</h2>
@@ -220,15 +216,17 @@ deleteMatch(id);
 			>
 				CLEAR
 			</Button>
-			<Table<Match>
-				className={styles.customTable}
-				columns={columns}
-				dataSource={matchesData}
-				pagination={false}
-				onChange={onChange}
-				showSorterTooltip={{ target: "full-header" }}
-				scroll={{ y: 85 * 5 }}
-			/>
+			<div className="overflow-auto rounded-lg shadow">
+				<Table<Match>
+					className={styles.customTable}
+					columns={columns}
+					dataSource={matchesData}
+					pagination={false}
+					onChange={onChange}
+					showSorterTooltip={{ target: "full-header" }}
+					scroll={{ y: 85 * 5 }}
+				/>
+			</div>
 		</>
 	);
 };

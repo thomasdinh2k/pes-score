@@ -1,7 +1,7 @@
 "use client";
-import type { PlayerRank } from "../types/data.type";
-import { Table } from "antd";
 import type { TableProps } from "antd";
+import { Table } from "antd";
+import type { PlayerRank } from "../types/data.type";
 
 const Ranking = ({
 	rankingData,
@@ -62,12 +62,14 @@ const Ranking = ({
 	return (
 		<>
 			<h2>Ranking</h2>
-			<Table<PlayerRank>
-				columns={columns}
-				dataSource={rankingData}
-				loading={loading}
-				pagination={false}
-			/>
+			<div className="overflow-auto rounded-lg shadow">
+				<Table<PlayerRank>
+					columns={columns}
+					dataSource={rankingData}
+					loading={loading}
+					pagination={false}
+				/>
+			</div>
 		</>
 	);
 };
