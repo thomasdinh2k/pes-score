@@ -7,6 +7,7 @@ import Loading from "./components/Loading";
 import MatchHistory from "./components/MatchHistory";
 import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
+import useViewport from "./hooks/viewport";
 import { getAllMatches } from "./services/data.service";
 import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 
@@ -32,6 +33,9 @@ export default function Home() {
 		ranking: boolean;
 		matches: boolean;
 	}>({ ranking: true, matches: true });
+
+	const viewPort = useViewport();
+	const isMobile: boolean = viewPort.width <= 425;
 
 	useEffect(() => {
 		getAllMatches().then((data) => {
@@ -160,6 +164,9 @@ export default function Home() {
 		<>
 			<h1 className="text-center font-bold my-5">
 				Thomas&apos;s PES History
+			</h1>
+			<h1 className="text-lg text-center font-bold my-5">
+				{viewPort.width} | {isMobile ? "Mobile" : "Desktop"}
 			</h1>
 			<section aria-label="match-input">
 				<MatchInput matchQuantity={data.matches.length} />
