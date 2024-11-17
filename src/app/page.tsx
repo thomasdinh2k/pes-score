@@ -9,6 +9,7 @@ import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
 import useViewport from "./hooks/viewport";
 import { getAllMatches } from "./services/data.service";
+import MatchHistoryMobile from "./test-ui/page";
 import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 
 /**
@@ -201,6 +202,10 @@ export default function Home() {
 				{isShow.ranking && (
 					<Ranking rankingData={rankingData} loading={loading} />
 				)}
+			</section>
+
+			<section aria-label="match-score">
+				<MatchHistoryMobile />
 			</section>
 
 			<section aria-label="match-history">
