@@ -123,7 +123,9 @@ const MatchHistory = ({ matchesData, triggerRefresh }: Props) => {
 		{
 			title: "Action",
 			render: (_, record) => (
-				<Button onClick={() => handleShowEditModal(record._id)}>
+				<Button
+					onClick={() => handleShowEditModal(record._id as number)}
+				>
 					Edit
 				</Button>
 			),
