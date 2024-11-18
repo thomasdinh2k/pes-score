@@ -1,13 +1,32 @@
 "use client";
 
+import { Space } from "antd";
+import { Switch } from "antd-mobile";
 import { useEffect, useState } from "react";
+import Loading from "./components/Loading";
 import MatchHistory from "./components/MatchHistory";
 import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
-import type { FetchedData, Match, PlayerRank } from "./types/data.type";
-import { Skeleton, Space, Switch } from "antd";
+import useViewport from "./hooks/viewport";
 import { getAllMatches } from "./services/data.service";
+// import MatchHistoryMobile from "./test-ui/page";
+import MatchHistoryMobile from "./components/MatchHistoryMobile";
+import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 
+/**
+ * The main page of the application, responsible for rendering the match history table,
+ * the ranking table, and the match input form.
+ *
+ * The page fetches data from the server and stores it in the component state.
+ * It also handles the business logic of ranking the players based on the match history.
+ *
+ * The page renders the following components:
+ * - MatchInput: a form for inputting new matches
+ * - Ranking: a table displaying the ranking of the players
+ * - MatchHistory: a table displaying the match history
+ *
+ * The page also handles the state of whether the ranking and match history tables are shown or not.
+ */
 export default function Home() {
 	const [data, setData] = useState<FetchedData>();
 	const [rankingData, setRankingData] = useState<PlayerRank[]>();
@@ -16,6 +35,9 @@ export default function Home() {
 		ranking: boolean;
 		matches: boolean;
 	}>({ ranking: true, matches: true });
+
+	const viewPort = useViewport();
+	const isMobile: boolean = viewPort.width <= 425;
 
 	useEffect(() => {
 		getAllMatches().then((data) => {
@@ -137,7 +159,7 @@ export default function Home() {
 	};
 
 	if (loading || !data || !rankingData) {
-		return <Skeleton />;
+		return <Loading />;
 	}
 
 	return (
@@ -146,15 +168,13 @@ export default function Home() {
 				Thomas&apos;s PES History
 			</h1>
 			<section aria-label="match-input">
-				<MatchInput
-					matchQuantity={data.matches.length}
-				/>
+				<MatchInput matchQuantity={data.matches.length} />
 			</section>
 
 			<Space direction="horizontal">
 				<Switch
-					checkedChildren="Show Ranking"
-					unCheckedChildren="Hide Ranking"
+					checkedText="Show Ranking"
+					uncheckedText="Hide Ranking"
 					defaultChecked
 					onChange={(checked) =>
 						setIsShow((prevState) => ({
@@ -164,8 +184,8 @@ export default function Home() {
 					}
 				/>
 				<Switch
-					checkedChildren="Show Matches"
-					unCheckedChildren="Hide Matches"
+					checkedText="Show Matches"
+					uncheckedText="Hide Matches"
 					defaultChecked
 					onChange={(checked) =>
 						setIsShow((prevState) => ({
@@ -182,8 +202,14 @@ export default function Home() {
 				)}
 			</section>
 
+			{isShow.matches && isMobile && (
+				<section aria-label="match-score">
+					<MatchHistoryMobile matches={data.matches} />
+				</section>
+			)}
+
 			<section aria-label="match-history">
-				{isShow.matches && (
+				{isShow.matches && !isMobile && (
 					<MatchHistory
 						matchesData={data.matches}
 						triggerRefresh={triggerRefresh}
