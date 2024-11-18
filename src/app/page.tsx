@@ -9,7 +9,7 @@ import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
 import useViewport from "./hooks/viewport";
 import { getAllMatches } from "./services/data.service";
-import MatchHistoryMobile from "./test-ui/page";
+// import MatchHistoryMobile from "./test-ui/page";
 import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 
 /**
@@ -204,9 +204,9 @@ export default function Home() {
 				)}
 			</section>
 
-			<section aria-label="match-score">
+			{/* <section aria-label="match-score">
 				<MatchHistoryMobile />
-			</section>
+			</section> */}
 
 			<section aria-label="match-history">
 				{isShow.matches && (
