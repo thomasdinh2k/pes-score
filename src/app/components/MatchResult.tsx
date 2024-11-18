@@ -18,7 +18,7 @@ const ScoreBoard = ({
 	if (home_score > away_score) {
 		objectColorClass = "bg-[#00985f]";
 	} else if (home_score < away_score) {
-		objectColorClass = "bg-[#ff0000]";
+		objectColorClass = "bg-[#dd3636]";
 	} else {
 		objectColorClass = "bg-[#7c817f]";
 	}
@@ -42,14 +42,21 @@ const PlayerName = ({
 	if (!clubName) {
 		return (
 			<div className="flex flex-col gap-0 items-center align-middle">
-				<span className="text-lg">{playerName}</span>
+				<span style={{ fontSize: "clamp(0.75rem, 1.5vw, 1.25rem)" }}>
+					{playerName}
+				</span>
 			</div>
 		);
 	}
 	return (
 		<div className="flex flex-col gap-0 items-center align-middle">
 			<span className="text-[0.5rem] -mb-2 font-light">{playerName}</span>
-			<p className="text-lg">{clubName}</p>
+			<p
+				className="text-lg whitespace-nowrap overflow-hidden truncate max-w-full"
+				style={{ fontSize: "clamp(0.75rem, 1.5vw, 1.25rem)" }}
+			>
+				{clubName}
+			</p>
 		</div>
 	);
 };
@@ -63,18 +70,24 @@ const MatchResult: FC<MatchResultProps> = ({ result }): React.JSX.Element => {
 					<p>{result.time}</p>
 				</span>
 				<div className="bottom-half flex justify-center items-center gap-4">
-					<PlayerName
-						playerName={result.home_player}
-						clubName={result.home_team}
-					/>
-					<ScoreBoard
-						home_score={result.home_score}
-						away_score={result.away_score}
-					/>
-					<PlayerName
-						playerName={result.away_player}
-						clubName={result.away_team}
-					/>
+					<div className="flex flex-1 justify-end">
+						<PlayerName
+							playerName={result.home_player}
+							clubName={result.home_team}
+						/>
+					</div>
+					<div className="flex-none mx-2">
+						<ScoreBoard
+							home_score={result.home_score}
+							away_score={result.away_score}
+						/>
+					</div>
+					<div className="flex flex-1 justify-start">
+						<PlayerName
+							playerName={result.away_player}
+							clubName={result.away_team}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
