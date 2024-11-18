@@ -24,6 +24,7 @@
     "@atlaskit/tokens": "^2.2.0",
     "@emotion/react": "^11.13.3",
     "antd": "^5.21.6",
+    "antd-mobile": "^5.38.1",
     "antd-style": "^3.7.1",
     "dayjs": "^1.11.13",
     "husky": "^9.1.6",

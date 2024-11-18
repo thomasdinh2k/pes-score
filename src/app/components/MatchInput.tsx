@@ -1,10 +1,10 @@
 "use client";
-import { UserOutlined, TrophyOutlined } from "@ant-design/icons";
+import { TrophyOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import { Match } from "../types/data.type";
 import dayjs from "dayjs";
 import { postMatch } from "../services/data.service";
+import { Match } from "../types/data.type";
 type Props = {
 	isEdit?: boolean;
 	matchQuantity?: number;
@@ -16,7 +16,6 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 	};
 	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
 		if (isEdit) {
-			console.log("Submitting edit form", values);
 		} else {
 			const submitPayload = {
 				...values,
@@ -25,7 +24,6 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 				date: dayjs().format("YYYY-MM-DD"),
 				time: dayjs().format("HH:mm"),
 			};
-			console.log("Submitting new form", submitPayload);
 			postMatch(submitPayload);
 
 			triggerRefresh();
@@ -51,8 +49,8 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 					indicator === "increase"
 						? (currentScore.home_score += 1)
 						: currentScore.home_score > 0
-						? (currentScore.home_score -= 1)
-						: 0
+							? (currentScore.home_score -= 1)
+							: 0
 				);
 				break;
 			case "away_score":
@@ -61,8 +59,8 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 					indicator === "increase"
 						? (currentScore.away_score += 1)
 						: currentScore.away_score > 0
-						? (currentScore.away_score -= 1)
-						: 0
+							? (currentScore.away_score -= 1)
+							: 0
 				);
 				break;
 			default:
@@ -122,7 +120,7 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 										? Promise.resolve()
 										: Promise.reject(
 												"Score must be an integer"
-										  ),
+											),
 							},
 						]}
 					>
@@ -185,7 +183,7 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 										? Promise.resolve()
 										: Promise.reject(
 												"Score must be an integer"
-										  ),
+											),
 							},
 						]}
 					>
