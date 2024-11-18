@@ -10,6 +10,7 @@ import Ranking from "./components/Ranking";
 import useViewport from "./hooks/viewport";
 import { getAllMatches } from "./services/data.service";
 // import MatchHistoryMobile from "./test-ui/page";
+import MatchHistoryMobile from "./components/MatchHistoryMobile";
 import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 
 /**
@@ -166,9 +167,6 @@ export default function Home() {
 			<h1 className="text-center font-bold my-5">
 				Thomas&apos;s PES History
 			</h1>
-			<h1 className="text-lg text-center font-bold my-5">
-				{viewPort.width} | {isMobile ? "Mobile" : "Desktop"}
-			</h1>
 			<section aria-label="match-input">
 				<MatchInput matchQuantity={data.matches.length} />
 			</section>
@@ -204,12 +202,14 @@ export default function Home() {
 				)}
 			</section>
 
-			{/* <section aria-label="match-score">
-				<MatchHistoryMobile />
-			</section> */}
+			{isShow.matches && isMobile && (
+				<section aria-label="match-score">
+					<MatchHistoryMobile matches={data.matches} />
+				</section>
+			)}
 
 			<section aria-label="match-history">
-				{isShow.matches && (
+				{isShow.matches && !isMobile && (
 					<MatchHistory
 						matchesData={data.matches}
 						triggerRefresh={triggerRefresh}
