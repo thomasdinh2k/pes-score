@@ -6,15 +6,15 @@ export async function PUT(req, { params }) {
 	const { id } = await params;
 
 	const {
-		newMatchNumber: match_number,
-		newDate: date,
-		newTime: time,
-		newHomePlayer: home_player,
-		newHomeTeam: home_team,
-		newHomeScore: home_score,
-		newAwayPlayer: away_player,
-		newAwayTeam: away_team,
-		newAwayScore: away_score,
+		match_number,
+		date,
+		time,
+		home_player,
+		home_team,
+		home_score,
+		away_player,
+		away_team,
+		away_score,
 	} = await req.json();
 
 	await connectMongoDB();

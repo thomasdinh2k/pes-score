@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
 import React, { FC } from "react";
+import { useDispatch } from "react-redux";
+import { showModal } from "../slices/matchSlice";
 import { Match } from "../types/data.type";
 
 type MatchResultProps = {
@@ -65,8 +67,16 @@ const PlayerName = ({
 };
 
 const MatchResult: FC<MatchResultProps> = ({ result }): React.JSX.Element => {
+	const dispatch = useDispatch();
+
+	const handleOpenEditModal = () => {
+		const matchID = result._id;
+
+		dispatch(showModal(matchID));
+	};
+
 	return (
-		<div className="">
+		<>
 			<div className="flex flex-col border-b border-gray-200 pb-2">
 				<span className="top-half text-xs font-light text-gray-600 flex justify-between px-1 text-[0.5rem]">
 					<p>{dayjs(result.date).format("ddd, DD MMM")}</p>
@@ -79,7 +89,7 @@ const MatchResult: FC<MatchResultProps> = ({ result }): React.JSX.Element => {
 							clubName={result.home_team}
 						/>
 					</div>
-					<div className="flex-none">
+					<div className="flex-none" onClick={handleOpenEditModal}>
 						<ScoreBoard
 							home_score={result.home_score}
 							away_score={result.away_score}
@@ -93,7 +103,7 @@ const MatchResult: FC<MatchResultProps> = ({ result }): React.JSX.Element => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

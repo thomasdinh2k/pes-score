@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Space } from "antd";
+import { Alert, Modal, Space } from "antd";
 import { Switch } from "antd-mobile";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading";
@@ -10,10 +10,15 @@ import Ranking from "./components/Ranking";
 import useViewport from "./hooks/viewport";
 import { getAllMatches } from "./services/data.service";
 // import MatchHistoryMobile from "./test-ui/page";
-import { Provider } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import MatchHistoryMobile from "./components/MatchHistoryMobile";
-import store from "./store";
-import type { FetchedData, Match, PlayerRank } from "./types/data.type";
+
+import EditMatchModal from "./components/EditMatchModal";
+import { hideModal, setMatchDetail } from "./slices/matchSlice";
+
+import { RootState, store } from "./store";
+import type { FetchedData, PlayerRank } from "./types/data.type";
+import { calculateData, triggerRefresh } from "./utils/util";
 
 /**
  * The main page of the application, responsible for rendering the match history table,
@@ -53,124 +58,33 @@ function HomeContent() {
 	const viewPort = useViewport();
 	const isMobile: boolean = viewPort.width <= 425;
 
+	const matchRedux = useSelector((state: RootState) => state.match);
+	const { visible, currentMatchID } = matchRedux;
+	const dispatch = useDispatch();
+
 	useEffect(() => {
 		getAllMatches().then((data) => {
 			if (data) {
 				setData(data);
+				dispatch(
+					setMatchDetail(
+						data.matches.filter(
+							(match) => match._id === currentMatchID
+						)[0]
+					)
+				);
 				setLoading(false);
 			}
 		});
-	}, []);
+	}, [currentMatchID, dispatch]);
 
 	useEffect(() => {
 		// Calculate rankingData
-
-		const calculateData = (matchHistory: Match[]): PlayerRank[] => {
-			const rankingResult: PlayerRank[] = [];
-
-			const initialData = {
-				rank: 0,
-				wins: 0,
-				draws: 0,
-				losses: 0,
-				goals_for: 0,
-				goals_against: 0,
-				goal_difference: 0,
-				points: 0,
-			};
-
-			matchHistory.forEach((match) => {
-				const n_HomePlayer: string = normalizeWord(match.home_player);
-				const n_awayPlayer: string = normalizeWord(match.away_player);
-
-				// Ensure players exist in the array as objects, not by named keys
-				let homePlayerData = rankingResult.find(
-					(player) => player.player === n_HomePlayer
-				);
-				let awayPlayerData = rankingResult.find(
-					(player) => player.player === n_awayPlayer
-				);
-
-				if (!homePlayerData) {
-					homePlayerData = {
-						player: n_HomePlayer,
-						...initialData,
-					};
-					rankingResult.push(homePlayerData);
-				}
-
-				if (!awayPlayerData) {
-					awayPlayerData = {
-						player: n_awayPlayer,
-						...initialData,
-					};
-					rankingResult.push(awayPlayerData);
-				}
-
-				// Calculate wins/draws/losses
-				if (match.home_score > match.away_score) {
-					homePlayerData.wins++;
-					awayPlayerData.losses++;
-
-					homePlayerData.points += 3;
-				} else if (match.home_score < match.away_score) {
-					awayPlayerData.wins++;
-					homePlayerData.losses++;
-
-					awayPlayerData.points += 3;
-				} else if (match.home_score === match.away_score) {
-					homePlayerData.draws++;
-					awayPlayerData.draws++;
-					homePlayerData.points++;
-					awayPlayerData.points++;
-				}
-
-				// Calculate goals difference
-				homePlayerData.goals_for += match.home_score;
-				homePlayerData.goals_against += match.away_score;
-				awayPlayerData.goals_for += match.away_score;
-				awayPlayerData.goals_against += match.home_score;
-
-				homePlayerData.goal_difference +=
-					match.home_score - match.away_score;
-				awayPlayerData.goal_difference +=
-					match.away_score - match.home_score;
-			});
-
-			/* Ranking player based on
-			1. Points
-			2. Goal Difference
-			3. Goal Scored
-			4. Head to Head (advanced) 
-			*/
-			rankingResult.sort((a, b) => {
-				if (a.points !== b.points) {
-					return b.points - a.points;
-				}
-
-				return b.goal_difference - a.goal_difference;
-			});
-
-			for (let i = 0; i < rankingResult.length; i++) {
-				rankingResult[i].rank = i + 1;
-			}
-
-			return rankingResult;
-		};
-
 		if (data && !loading) {
 			const result = calculateData(data.matches);
 			setRankingData(result);
 		}
 	}, [data, loading]);
-
-	const normalizeWord = (word: string): string => {
-		return word.normalize("NFC");
-	};
-
-	const triggerRefresh = () => {
-		window.location.reload();
-	};
 
 	if (loading || !data || !rankingData) {
 		return <Loading />;
@@ -178,6 +92,15 @@ function HomeContent() {
 
 	return (
 		<>
+			<Modal
+				title="Edit Match"
+				centered
+				open={visible}
+				footer={null}
+				onCancel={() => dispatch(hideModal())}
+			>
+				<EditMatchModal />
+			</Modal>
 			{errorMessage && (
 				<Alert
 					message={errorMessage.message}

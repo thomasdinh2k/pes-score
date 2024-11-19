@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
 	visible: false,
-	currentMatchID: 0,
+	currentMatchID: undefined,
+	matchDetail: undefined,
 };
 
 export const matchSlice = createSlice({
@@ -15,10 +16,17 @@ export const matchSlice = createSlice({
 		},
 		hideModal: (state) => {
 			state.visible = false;
+			state.currentMatchID = undefined;
+			state.matchDetail = undefined;
+		},
+
+		// Set matchDetail
+		setMatchDetail: (state, action) => {
+			state.matchDetail = action.payload;
 		},
 	},
 });
 
-export const { showModal, hideModal } = matchSlice.actions;
+export const { showModal, hideModal, setMatchDetail } = matchSlice.actions;
 
 export default matchSlice.reducer;

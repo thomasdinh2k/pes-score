@@ -48,6 +48,33 @@ export const postMatch = async (matchInfo: Match) => {
 	}
 };
 
+export const editMatch = async (matchID: number, matchInfo: Match) => {
+	try {
+		const res = await fetch(`/api/match/${matchID}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(matchInfo),
+		});
+		const data = await res.json();
+
+		if (!res || !res.ok) {
+			throw new Error(
+				data.error || data.message || "Failed to put match"
+			);
+		}
+
+		return data;
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		} else {
+			throw new Error("An unexpected error occurred.");
+		}
+	}
+};
+
 export const deleteMatch = async (id: number) => {
 	const confirmed = confirm("Are you sure you want to delete this match?");
 	if (!confirmed) {
