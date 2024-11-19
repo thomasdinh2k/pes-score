@@ -69,14 +69,14 @@ const MatchResult: FC<MatchResultProps> = ({ result }): React.JSX.Element => {
 					<p>{dayjs(result.date).format("ddd, DD MMM")}</p>
 					<p>{result.time}</p>
 				</span>
-				<div className="bottom-half flex justify-center items-center gap-4">
+				<div className="bottom-half flex justify-center items-center gap-5">
 					<div className="flex flex-1 justify-end">
 						<PlayerName
 							playerName={result.home_player}
 							clubName={result.home_team}
 						/>
 					</div>
-					<div className="flex-none mx-2">
+					<div className="flex-none">
 						<ScoreBoard
 							home_score={result.home_score}
 							away_score={result.away_score}
