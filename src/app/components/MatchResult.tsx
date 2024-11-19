@@ -24,10 +24,13 @@ const ScoreBoard = ({
 	}
 
 	return (
-		<div
-			className={`score-board ${objectColorClass} text-white px-2 py-1 font-bold rounded-md `}
-		>
-			{home_score} - {away_score}
+		<div className="flex flex-col items-center">
+			<div className="text-[0.35rem] uppercase">edit</div>
+			<div
+				className={`score-board ${objectColorClass} text-white px-2 py-1 font-bold rounded-md `}
+			>
+				{home_score} - {away_score}
+			</div>
 		</div>
 	);
 };

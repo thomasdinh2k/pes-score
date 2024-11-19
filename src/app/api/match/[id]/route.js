@@ -1,11 +1,9 @@
-import connectMongoDB from "../../../../../lib/mongodb";
 import { NextResponse } from "next/server";
+import connectMongoDB from "../../../../../lib/mongodb";
 import Match from "../../../../../models/match";
 
 export async function PUT(req, { params }) {
-	// console.log(params)
 	const { id } = await params;
-	console.log("🪳 ~ file: route.js:7 ~ PUT ~ id||", id);
 
 	const {
 		newMatchNumber: match_number,
@@ -56,9 +54,9 @@ export async function PUT(req, { params }) {
 
 // Get one particular match
 export async function GET(req, { params }) {
-    const { id } = await params;
-    await connectMongoDB();
-    const match = await Match.findOne({ _id: id });
+	const { id } = await params;
+	await connectMongoDB();
+	const match = await Match.findOne({ _id: id });
 
-    return NextResponse.json({ success: true, match });
+	return NextResponse.json({ success: true, match });
 }
