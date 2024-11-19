@@ -3,19 +3,62 @@ import { TrophyOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import dayjs from "dayjs";
-import { postMatch } from "../services/data.service";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { deleteMatch, editMatch, postMatch } from "../services/data.service";
+import { RootState } from "../store";
 import { Match } from "../types/data.type";
 type Props = {
 	isEdit?: boolean;
 	matchQuantity?: number;
+	setErrorMessage?: React.Dispatch<
+		React.SetStateAction<
+			| {
+					message: string;
+					description?: string;
+			  }
+			| undefined
+		>
+	>;
 };
 
-function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
+function MatchInput({
+	isEdit = false,
+	matchQuantity = 0,
+	setErrorMessage,
+}: Props) {
 	const triggerRefresh = () => {
 		window.location.reload();
 	};
-	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
+
+	const matchDetailEditOnly = useSelector(
+		(state: RootState) => state.match.matchDetail
+	);
+
+	const handleSubmitForm: FormProps<Match>["onFinish"] = async (values) => {
 		if (isEdit) {
+			// Handle edit case
+			const submitPayload = {
+				...values,
+			};
+
+			try {
+				await editMatch(
+					matchDetailEditOnly?.["_id"] || 0,
+					submitPayload
+				);
+				triggerRefresh();
+			} catch (error) {
+				const errorMsg: { message: string; description: string } = {
+					message: "Failed to edit match",
+					description: "",
+				};
+
+				if (error instanceof Error) {
+					errorMsg.description = error.message;
+				}
+				setErrorMessage?.(errorMsg);
+			}
 		} else {
 			const submitPayload = {
 				...values,
@@ -24,9 +67,21 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 				date: dayjs().format("YYYY-MM-DD"),
 				time: dayjs().format("HH:mm"),
 			};
-			postMatch(submitPayload);
+			try {
+				// Await the postMatch function to ensure it completes before proceeding
+				await postMatch(submitPayload);
+				triggerRefresh();
+			} catch (error) {
+				const errorMsg: { message: string; description: string } = {
+					message: "Failed to create match",
+					description: "",
+				};
 
-			triggerRefresh();
+				if (error instanceof Error) {
+					errorMsg.description = error.message;
+				}
+				setErrorMessage?.(errorMsg);
+			}
 		}
 	};
 
@@ -36,7 +91,6 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 		home_score: form.getFieldValue("home_score") || 0,
 		away_score: form.getFieldValue("away_score") || 0,
 	};
-	// currentScore = form.getFieldsValue(["home_score", "away_score"]);
 
 	const handleUpdateScoreInput = (
 		type: "home_score" | "away_score",
@@ -67,6 +121,34 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 				break;
 		}
 	};
+
+	const handleDeleteMatch = async () => {
+		try {
+			await deleteMatch(matchDetailEditOnly?.["_id"] || 0);
+			triggerRefresh();
+		} catch (error) {
+			const errorMsg: { message: string; description: string } = {
+				message: "Failed to delete this match",
+				description: "",
+			};
+
+			if (error instanceof Error) {
+				errorMsg.description = error.message;
+			}
+			setErrorMessage?.(errorMsg);
+		}
+	};
+
+	useEffect(() => {
+		const handleSetInitialDataOnEdit = () => {
+			form.resetFields(); // Reset temporary form data
+			form.setFieldsValue(matchDetailEditOnly);
+		};
+
+		if (matchDetailEditOnly) {
+			handleSetInitialDataOnEdit();
+		}
+	}, [form, matchDetailEditOnly]);
 
 	return (
 		<div className="match-input">
@@ -213,9 +295,12 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 					</button>
 				</Space.Compact>
 
-				<Form.Item>
+				<Form.Item className="mt-4">
 					<Button type="primary" htmlType="submit">
-						Add Result
+						{isEdit ? "Update" : "Add new"} Result
+					</Button>
+					<Button className="ml-4" onClick={handleDeleteMatch}>
+						Delete Match
 					</Button>
 				</Form.Item>
 			</Form>

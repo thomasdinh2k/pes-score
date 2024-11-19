@@ -1,22 +1,20 @@
-import connectMongoDB from "../../../../../lib/mongodb";
 import { NextResponse } from "next/server";
+import connectMongoDB from "../../../../../lib/mongodb";
 import Match from "../../../../../models/match";
 
 export async function PUT(req, { params }) {
-	// console.log(params)
 	const { id } = await params;
-	console.log("🪳 ~ file: route.js:7 ~ PUT ~ id||", id);
 
 	const {
-		newMatchNumber: match_number,
-		newDate: date,
-		newTime: time,
-		newHomePlayer: home_player,
-		newHomeTeam: home_team,
-		newHomeScore: home_score,
-		newAwayPlayer: away_player,
-		newAwayTeam: away_team,
-		newAwayScore: away_score,
+		match_number,
+		date,
+		time,
+		home_player,
+		home_team,
+		home_score,
+		away_player,
+		away_team,
+		away_score,
 	} = await req.json();
 
 	await connectMongoDB();
@@ -56,9 +54,9 @@ export async function PUT(req, { params }) {
 
 // Get one particular match
 export async function GET(req, { params }) {
-    const { id } = await params;
-    await connectMongoDB();
-    const match = await Match.findOne({ _id: id });
+	const { id } = await params;
+	await connectMongoDB();
+	const match = await Match.findOne({ _id: id });
 
-    return NextResponse.json({ success: true, match });
+	return NextResponse.json({ success: true, match });
 }

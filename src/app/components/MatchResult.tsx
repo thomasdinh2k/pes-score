@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
 import React, { FC } from "react";
+import { useDispatch } from "react-redux";
+import { showModal } from "../slices/matchSlice";
 import { Match } from "../types/data.type";
 
 type MatchResultProps = {
@@ -24,10 +26,13 @@ const ScoreBoard = ({
 	}
 
 	return (
-		<div
-			className={`score-board ${objectColorClass} text-white px-2 py-1 font-bold rounded-md `}
-		>
-			{home_score} - {away_score}
+		<div className="flex flex-col items-center">
+			<div className="text-[0.35rem] uppercase">edit</div>
+			<div
+				className={`score-board ${objectColorClass} text-white px-2 py-1 font-bold rounded-md `}
+			>
+				{home_score} - {away_score}
+			</div>
 		</div>
 	);
 };
@@ -62,21 +67,29 @@ const PlayerName = ({
 };
 
 const MatchResult: FC<MatchResultProps> = ({ result }): React.JSX.Element => {
+	const dispatch = useDispatch();
+
+	const handleOpenEditModal = () => {
+		const matchID = result._id;
+
+		dispatch(showModal(matchID));
+	};
+
 	return (
-		<div className="">
+		<>
 			<div className="flex flex-col border-b border-gray-200 pb-2">
 				<span className="top-half text-xs font-light text-gray-600 flex justify-between px-1 text-[0.5rem]">
 					<p>{dayjs(result.date).format("ddd, DD MMM")}</p>
 					<p>{result.time}</p>
 				</span>
-				<div className="bottom-half flex justify-center items-center gap-4">
+				<div className="bottom-half flex justify-center items-center gap-5">
 					<div className="flex flex-1 justify-end">
 						<PlayerName
 							playerName={result.home_player}
 							clubName={result.home_team}
 						/>
 					</div>
-					<div className="flex-none mx-2">
+					<div className="flex-none" onClick={handleOpenEditModal}>
 						<ScoreBoard
 							home_score={result.home_score}
 							away_score={result.away_score}
@@ -90,7 +103,7 @@ const MatchResult: FC<MatchResultProps> = ({ result }): React.JSX.Element => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 
