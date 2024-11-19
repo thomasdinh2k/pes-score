@@ -10,7 +10,9 @@ import Ranking from "./components/Ranking";
 import useViewport from "./hooks/viewport";
 import { getAllMatches } from "./services/data.service";
 // import MatchHistoryMobile from "./test-ui/page";
+import { Provider } from "react-redux";
 import MatchHistoryMobile from "./components/MatchHistoryMobile";
+import store from "./store";
 import type { FetchedData, Match, PlayerRank } from "./types/data.type";
 
 /**
@@ -27,7 +29,15 @@ import type { FetchedData, Match, PlayerRank } from "./types/data.type";
  *
  * The page also handles the state of whether the ranking and match history tables are shown or not.
  */
+
 export default function Home() {
+	return (
+		<Provider store={store}>
+			<HomeContent />
+		</Provider>
+	);
+}
+function HomeContent() {
 	const [data, setData] = useState<FetchedData>();
 	const [rankingData, setRankingData] = useState<PlayerRank[]>();
 	const [loading, setLoading] = useState<boolean>(true);
