@@ -8,14 +8,28 @@ import { Match } from "../types/data.type";
 type Props = {
 	isEdit?: boolean;
 	matchQuantity?: number;
+	setErrorMessage?: React.Dispatch<
+		React.SetStateAction<
+			| {
+					message: string;
+					description?: string;
+			  }
+			| undefined
+		>
+	>;
 };
 
-function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
+function MatchInput({
+	isEdit = false,
+	matchQuantity = 0,
+	setErrorMessage,
+}: Props) {
 	const triggerRefresh = () => {
 		window.location.reload();
 	};
-	const handleSubmitForm: FormProps<Match>["onFinish"] = (values) => {
+	const handleSubmitForm: FormProps<Match>["onFinish"] = async (values) => {
 		if (isEdit) {
+			// Handle edit case
 		} else {
 			const submitPayload = {
 				...values,
@@ -24,9 +38,21 @@ function MatchInput({ isEdit = false, matchQuantity = 0 }: Props) {
 				date: dayjs().format("YYYY-MM-DD"),
 				time: dayjs().format("HH:mm"),
 			};
-			postMatch(submitPayload);
+			try {
+				// Await the postMatch function to ensure it completes before proceeding
+				await postMatch(submitPayload);
+				triggerRefresh();
+			} catch (error) {
+				const errorMsg: { message: string; description: string } = {
+					message: "Failed to create match",
+					description: "",
+				};
 
-			triggerRefresh();
+				if (error instanceof Error) {
+					errorMsg.description = error.message;
+				}
+				setErrorMessage?.(errorMsg);
+			}
 		}
 	};
 

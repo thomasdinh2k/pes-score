@@ -1,6 +1,6 @@
 "use client";
 
-import { Space } from "antd";
+import { Alert, Space } from "antd";
 import { Switch } from "antd-mobile";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading";
@@ -35,6 +35,10 @@ export default function Home() {
 		ranking: boolean;
 		matches: boolean;
 	}>({ ranking: true, matches: true });
+	const [errorMessage, setErrorMessage] = useState<{
+		message: string;
+		description?: string;
+	}>();
 
 	const viewPort = useViewport();
 	const isMobile: boolean = viewPort.width <= 425;
@@ -164,11 +168,26 @@ export default function Home() {
 
 	return (
 		<>
+			{errorMessage && (
+				<Alert
+					message={errorMessage.message}
+					description={errorMessage.description || false}
+					type="error"
+					showIcon
+					closable
+					afterClose={() => {
+						setErrorMessage(undefined);
+					}}
+				/>
+			)}
 			<h1 className="text-center font-bold my-5">
 				Thomas&apos;s PES History
 			</h1>
 			<section aria-label="match-input">
-				<MatchInput matchQuantity={data.matches.length} />
+				<MatchInput
+					matchQuantity={data.matches.length}
+					setErrorMessage={setErrorMessage}
+				/>
 			</section>
 
 			<Space direction="horizontal">
