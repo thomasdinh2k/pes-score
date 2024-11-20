@@ -19,7 +19,6 @@ import { hideModal, setMatchDetail } from "./slices/matchSlice";
 import { RootState, store } from "./store";
 import type { FetchedData, PlayerRank } from "./types/data.type";
 import { calculateData, triggerRefresh } from "./utils/util";
-
 /**
  * The main page of the application, responsible for rendering the match history table,
  * the ranking table, and the match input form.
@@ -37,9 +36,11 @@ import { calculateData, triggerRefresh } from "./utils/util";
 
 export default function Home() {
 	return (
+		// <SessionProvider session={sessions}>
 		<Provider store={store}>
 			<HomeContent />
 		</Provider>
+		// </SessionProvider>
 	);
 }
 function HomeContent() {
