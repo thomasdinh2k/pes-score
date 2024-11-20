@@ -8,7 +8,7 @@ import MatchHistory from "./components/MatchHistory";
 import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
 import useViewport from "./hooks/viewport";
-import { getAllMatches } from "./services/data.service";
+import { getAllMatches } from "./services/match.service";
 // import MatchHistoryMobile from "./test-ui/page";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import MatchHistoryMobile from "./components/MatchHistoryMobile";
