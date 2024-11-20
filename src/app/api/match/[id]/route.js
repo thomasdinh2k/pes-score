@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../../lib/mongodb";
-import Match from "../../../../../models/match";
+import Match from "../../../models/match";
 
 export async function PUT(req, { params }) {
 	const { id } = await params;
