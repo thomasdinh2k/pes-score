@@ -1,8 +1,14 @@
 import User from "@/app/models/user";
 import { addUserAuthentication } from "@/app/services/auth.service";
+import type { Account, User as NextAuthUserType } from "next-auth";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import connectMongoDB from "../../../../../lib/mongodb";
+
+type SignInCallbackParams = {
+	user: NextAuthUserType;
+	account: Account | null;
+};
 
 export const authOptions = {
 	// Configure one or more authentication providers
@@ -14,7 +20,7 @@ export const authOptions = {
 		// ...add more providers here
 	],
 	callbacks: {
-		async signIn({ user, account }) {
+		async signIn({ user, account }: SignInCallbackParams) {
 			if (account?.provider === "google") {
 				try {
 					await connectMongoDB();
