@@ -1,7 +1,7 @@
 "use client";
-
 import { Alert, Modal, Space } from "antd";
 import { Switch } from "antd-mobile";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading";
 import MatchHistory from "./components/MatchHistory";
@@ -16,6 +16,7 @@ import MatchHistoryMobile from "./components/MatchHistoryMobile";
 import EditMatchModal from "./components/EditMatchModal";
 import { hideModal, setMatchDetail } from "./slices/matchSlice";
 
+import { useSession } from "next-auth/react";
 import { RootState, store } from "./store";
 import type { FetchedData, PlayerRank } from "./types/data.type";
 import { calculateData, triggerRefresh } from "./utils/util";
@@ -35,12 +36,15 @@ import { calculateData, triggerRefresh } from "./utils/util";
  */
 
 export default function Home() {
+	const status = useSession();
+	if (status.status === "unauthenticated") {
+		redirect("/auth/login");
+	}
+
 	return (
-		// <SessionProvider session={sessions}>
 		<Provider store={store}>
 			<HomeContent />
 		</Provider>
-		// </SessionProvider>
 	);
 }
 function HomeContent() {
