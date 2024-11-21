@@ -3,7 +3,7 @@ import { createStyles } from "antd-style";
 import React from "react";
 import type { Match } from "../types/data.type";
 
-import { deleteAllMatches, deleteMatch } from "../services/data.service";
+import { deleteAllMatches, deleteMatch } from "../services/match.service";
 import MatchInput from "./MatchInput";
 
 type Props = {

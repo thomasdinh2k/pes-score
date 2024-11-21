@@ -1,14 +1,14 @@
 "use client";
-
 import { Alert, Modal, Space } from "antd";
 import { Switch } from "antd-mobile";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading";
 import MatchHistory from "./components/MatchHistory";
 import MatchInput from "./components/MatchInput";
 import Ranking from "./components/Ranking";
 import useViewport from "./hooks/viewport";
-import { getAllMatches } from "./services/data.service";
+import { getAllMatches } from "./services/match.service";
 // import MatchHistoryMobile from "./test-ui/page";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import MatchHistoryMobile from "./components/MatchHistoryMobile";
@@ -16,10 +16,10 @@ import MatchHistoryMobile from "./components/MatchHistoryMobile";
 import EditMatchModal from "./components/EditMatchModal";
 import { hideModal, setMatchDetail } from "./slices/matchSlice";
 
+import { useSession } from "next-auth/react";
 import { RootState, store } from "./store";
 import type { FetchedData, PlayerRank } from "./types/data.type";
 import { calculateData, triggerRefresh } from "./utils/util";
-
 /**
  * The main page of the application, responsible for rendering the match history table,
  * the ranking table, and the match input form.
@@ -36,6 +36,11 @@ import { calculateData, triggerRefresh } from "./utils/util";
  */
 
 export default function Home() {
+	const status = useSession();
+	if (status.status === "unauthenticated") {
+		redirect("/auth/login");
+	}
+
 	return (
 		<Provider store={store}>
 			<HomeContent />

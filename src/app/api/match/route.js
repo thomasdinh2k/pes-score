@@ -1,6 +1,6 @@
-import connectMongoDB from "../../../../lib/mongodb";
-import Match from "../../../../models/match";
 import { NextResponse } from "next/server";
+import connectMongoDB from "../../../../lib/mongodb";
+import Match from "../../models/match";
 
 export async function POST(req) {
 	const {
@@ -67,5 +67,8 @@ export async function DELETE(req) {
 	await connectMongoDB();
 	await Match.findByIdAndDelete(id);
 
-	return NextResponse.json({ success: true, message: "Match has been deleted!" });
+	return NextResponse.json({
+		success: true,
+		message: "Match has been deleted!",
+	});
 }

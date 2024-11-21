@@ -5,7 +5,7 @@ import FormItem from "antd/es/form/FormItem";
 import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { deleteMatch, editMatch, postMatch } from "../services/data.service";
+import { deleteMatch, editMatch, postMatch } from "../services/match.service";
 import { RootState } from "../store";
 import { Match } from "../types/data.type";
 type Props = {
