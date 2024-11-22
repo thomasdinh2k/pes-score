@@ -4,8 +4,9 @@ import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import dayjs from "dayjs";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteAllMatches, deleteMatch, editMatch, postMatch } from "../services/data.service";
+import { setMessage } from "../slices/messageSlice";
 import { RootState } from "../store";
 import { Match } from "../types/data.type";
 type Props = {
@@ -31,6 +32,8 @@ function MatchInput({
 		window.location.reload();
 	};
 
+	const dispatch = useDispatch();
+
 	const matchDetailEditOnly = useSelector(
 		(state: RootState) => state.match.matchDetail
 	);
@@ -48,6 +51,10 @@ function MatchInput({
 					submitPayload
 				);
 				triggerRefresh();
+				dispatch(setMessage({
+					type: "success",
+					content: "Match has been edited!"
+				}))
 			} catch (error) {
 				const errorMsg: { message: string; description: string } = {
 					message: "Failed to edit match",
@@ -71,6 +78,10 @@ function MatchInput({
 				// Await the postMatch function to ensure it completes before proceeding
 				await postMatch(submitPayload);
 				triggerRefresh();
+				dispatch(setMessage({
+					type: "success",
+					content: "Match has been created!"
+				}))
 			} catch (error) {
 				const errorMsg: { message: string; description: string } = {
 					message: "Failed to create match",

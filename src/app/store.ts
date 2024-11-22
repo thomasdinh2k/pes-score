@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import matchReducer from "./slices/matchSlice";
+import messageReducer from "./slices/messageSlice";
 
 export const store = configureStore({
 	reducer: {
 		match: matchReducer,
+		message: messageReducer,
 	},
 });
 
