@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Modal, Space } from "antd";
+import { Alert, message, Modal, Space } from "antd";
 import { Switch } from "antd-mobile";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading";
@@ -62,6 +62,21 @@ function HomeContent() {
 	const { visible, currentMatchID } = matchRedux;
 	const dispatch = useDispatch();
 
+	const [messageApi, contextHolder] = message.useMessage();
+	const messageState = useSelector((state: RootState) => state.message);
+
+	useEffect(() => {
+		if (messageState.content) {
+			messageApi.open({
+				type: messageState.type,
+				content: messageState.content,
+				duration: 3,
+			});
+		}
+		// // Clear the message
+		// dispatch(clearMessage());
+	}, [messageState, messageApi]);
+
 	useEffect(() => {
 		getAllMatches().then((data) => {
 			if (data) {
@@ -92,6 +107,7 @@ function HomeContent() {
 
 	return (
 		<>
+			{contextHolder}
 			<Modal
 				title="Edit Match"
 				centered

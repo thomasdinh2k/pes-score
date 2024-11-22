@@ -4,8 +4,9 @@ import { Button, Form, FormProps, Input, InputNumber, Space } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import dayjs from "dayjs";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { deleteMatch, editMatch, postMatch } from "../services/data.service";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAllMatches, deleteMatch, editMatch, postMatch } from "../services/data.service";
+import { setMessage } from "../slices/messageSlice";
 import { RootState } from "../store";
 import { Match } from "../types/data.type";
 type Props = {
@@ -14,9 +15,9 @@ type Props = {
 	setErrorMessage?: React.Dispatch<
 		React.SetStateAction<
 			| {
-					message: string;
-					description?: string;
-			  }
+				message: string;
+				description?: string;
+			}
 			| undefined
 		>
 	>;
@@ -30,6 +31,8 @@ function MatchInput({
 	const triggerRefresh = () => {
 		window.location.reload();
 	};
+
+	const dispatch = useDispatch();
 
 	const matchDetailEditOnly = useSelector(
 		(state: RootState) => state.match.matchDetail
@@ -48,6 +51,10 @@ function MatchInput({
 					submitPayload
 				);
 				triggerRefresh();
+				dispatch(setMessage({
+					type: "success",
+					content: "Match has been edited!"
+				}))
 			} catch (error) {
 				const errorMsg: { message: string; description: string } = {
 					message: "Failed to edit match",
@@ -71,6 +78,10 @@ function MatchInput({
 				// Await the postMatch function to ensure it completes before proceeding
 				await postMatch(submitPayload);
 				triggerRefresh();
+				dispatch(setMessage({
+					type: "success",
+					content: "Match has been created!"
+				}))
 			} catch (error) {
 				const errorMsg: { message: string; description: string } = {
 					message: "Failed to create match",
@@ -139,6 +150,23 @@ function MatchInput({
 		}
 	};
 
+	const handleDeleteAllMatches = async () => {
+		try {
+			await deleteAllMatches();
+			triggerRefresh();
+		} catch (error) {
+			const errorMsg: { message: string; description: string } = {
+				message: "Failed to delete all matches",
+				description: "",
+			};
+
+			if (error instanceof Error) {
+				errorMsg.description = error.message;
+			}
+			setErrorMessage?.(errorMsg);
+		}
+	}
+
 	useEffect(() => {
 		const handleSetInitialDataOnEdit = () => {
 			form.resetFields(); // Reset temporary form data
@@ -201,8 +229,8 @@ function MatchInput({
 									Number.isInteger(value)
 										? Promise.resolve()
 										: Promise.reject(
-												"Score must be an integer"
-											),
+											"Score must be an integer"
+										),
 							},
 						]}
 					>
@@ -264,8 +292,8 @@ function MatchInput({
 									Number.isInteger(value)
 										? Promise.resolve()
 										: Promise.reject(
-												"Score must be an integer"
-											),
+											"Score must be an integer"
+										),
 							},
 						]}
 					>
@@ -299,9 +327,15 @@ function MatchInput({
 					<Button type="primary" htmlType="submit">
 						{isEdit ? "Update" : "Add new"} Result
 					</Button>
-					<Button className="ml-4" onClick={handleDeleteMatch}>
-						Delete Match
-					</Button>
+					{isEdit ? (
+						<Button className="ml-4" onClick={handleDeleteMatch}>
+							Delete Match
+						</Button>
+					) : (
+						<Button className="ml-4" onClick={handleDeleteAllMatches}>
+							Delete All Matches
+						</Button>
+					)}
 				</Form.Item>
 			</Form>
 		</div>
